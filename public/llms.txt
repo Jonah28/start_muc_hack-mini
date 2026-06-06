@@ -1,0 +1,27 @@
+# HK-concept - Haus-, Immobilien- und Objektservice
+
+> Ihr Partner für Dienstleistungen rund ums Haus in der Region rund um Wesel.
+
+## Über uns
+HK-concept ist Ihr zuverlässiger Partner für Handwerks- und Dienstleistungen rund um Ihre Immobilie. Wir arbeiten regional vor Ort, zuverlässig und kompetent. Wir legen großen Wert auf strukturierte und transparente Prozesse – von der gemeinsamen Zielsetzung bis zur sauberen Umsetzung.
+
+## Unsere Leistungen
+- Badsanierung
+- Fliesenbearbeitung
+- Küchenmontage
+- Renovierungen aller Art
+- Wohnungsräumungen
+- Allgemeiner Haus-, Immobilien- und Objektservice
+
+## Kontakt & Erreichbarkeit
+- **Telefon:** +49 345 96397095 (Auch am Wochenende erreichbar via Hey Telo)
+- **Einsatzgebiet:** Wesel und Umgebung
+- **Webseite:** http://www.hk-concept.de
+
+## Warum wir?
+- Erfahrener Handwerksbetrieb mit regionaler Verwurzelung.
+- Schnelle Rückmeldung und saubere Arbeit (★★★★★ Kundenbewertung).
+- Freundlich, verbindlich und professionell von der Beratung bis zum Ergebnis.
+
+---
+*This file follows the llms.txt standard for Generative Engine Optimization (GEO). It provides a structured, machine-readable overview of the company for AI systems and LLM-based search engines.*
