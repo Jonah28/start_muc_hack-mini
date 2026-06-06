@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { ArrowRight, Globe } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { GameOverlay } from "@/components/ui/game-overlay";
@@ -23,7 +28,7 @@ const copy = {
     errorEmpty: "Bitte gib eine Website-Adresse ein.",
     errorInvalid:
       "Bitte gib eine gültige URL ein, z. B. https://www.deinbetrieb.de",
-    footer: "Gemacht für das deutsche Handwerk.",
+    scrollHint: "Scroll für mehr",
   },
   en: {
     badge: "For Tradespeople",
@@ -36,7 +41,7 @@ const copy = {
     errorEmpty: "Please enter a website address.",
     errorInvalid:
       "Please enter a valid URL, e.g. https://www.yourbusiness.com",
-    footer: "Made for German trades.",
+    scrollHint: "Scroll for more",
   },
 };
 
@@ -89,6 +94,37 @@ function FloatingEmoji({
   );
 }
 
+/* ── Scroll indicator ──────────────────────────────────────────────────── */
+function ScrollDots({ opacity }: { opacity: ReturnType<typeof useTransform> }) {
+  return (
+    <motion.div
+      className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none select-none"
+      style={{ opacity }}
+      aria-hidden
+    >
+      {[0, 1, 2].map((i) => (
+        <motion.span
+          key={i}
+          className="block rounded-full"
+          style={{
+            width: 5,
+            height: 5,
+            background: "var(--color-brand-green)",
+            opacity: 0.35,
+          }}
+          animate={{ opacity: [0.2, 0.9, 0.2], y: [0, 4, 0] }}
+          transition={{
+            duration: 1.4,
+            repeat: Infinity,
+            delay: i * 0.22,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </motion.div>
+  );
+}
+
 /* ── Helpers ───────────────────────────────────────────────────────────── */
 function isValidUrl(val: string) {
   try {
@@ -121,10 +157,24 @@ export function AnimatedHero({ lang, onLangChange }: HeroProps) {
   const greetings = lang === "de" ? GREETINGS_DE : GREETINGS_EN;
   const t         = copy[lang];
 
+  /* scrollYProgress: 0 = section top at viewport top
+                      1 = section bottom exits viewport top
+     With 160vh section height, the sticky viewport holds for 60vh of scroll budget. */
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
+
+  /* Form reveals between 12–32% of scroll progress */
+  const formOpacity       = useTransform(scrollYProgress, [0.12, 0.32], [0, 1]);
+  const formY             = useTransform(scrollYProgress, [0.12, 0.32], [52, 0]);
+  const formPointerEvents = useTransform(scrollYProgress, (v) => (v > 0.12 ? "auto" : "none"));
+
+  /* Text drifts slightly upward as form comes in */
+  const textY = useTransform(scrollYProgress, [0.10, 0.32], [0, -22]);
+
+  /* Scroll hint fades as user starts scrolling */
+  const hintOpacity = useTransform(scrollYProgress, [0, 0.06, 0.16], [1, 1, 0]);
 
   useEffect(() => {
     const id = setTimeout(
@@ -162,113 +212,134 @@ export function AnimatedHero({ lang, onLangChange }: HeroProps) {
   });
 
   return (
-    <section ref={heroRef} className="relative overflow-hidden min-h-[90vh] flex items-center">
+    /* ── Outer section: 160vh gives scroll budget for the sticky reveal ── */
+    <section ref={heroRef} className="relative min-h-[160vh]">
 
-      {/* Floating emoji layer */}
-      {TRADE_EMOJIS.map((e) => (
-        <FloatingEmoji key={e.emoji} {...e} scrollYProgress={scrollYProgress} />
-      ))}
+      {/* ── Sticky viewport ─────────────────────────────────────────────── */}
+      <div className="sticky top-0 h-dvh overflow-hidden flex items-center">
 
-      {/* Content */}
-      <div className="relative z-10 max-w-3xl mx-auto px-6 py-24 w-full">
-        {/* Badge */}
-        <motion.div {...fadeUp(0.05)}>
-          <span className="inline-flex items-center text-[11px] font-bold tracking-[0.1em] uppercase text-brand-green bg-brand-green-light rounded-full px-4 py-1.5 mb-8 select-none">
-            {t.badge}
-          </span>
-        </motion.div>
+        {/* Floating emoji layer — inside sticky so they stay visible */}
+        {TRADE_EMOJIS.map((e) => (
+          <FloatingEmoji key={e.emoji} {...e} scrollYProgress={scrollYProgress} />
+        ))}
 
-        {/* Rotating greeting */}
-        <div className="h-16 md:h-[4.5rem] overflow-hidden flex items-center mb-3">
-          <AnimatePresence mode="wait">
-            <motion.span
-              key={`${lang}-${greetingIdx}`}
-              className="block font-extrabold text-5xl md:text-[3.75rem] leading-none tracking-tight text-brand-green"
-              style={{ fontFamily: "var(--font-display)" }}
-              initial={{ y: 64, opacity: 0, filter: "blur(6px)" }}
-              animate={{ y: 0,  opacity: 1, filter: "blur(0px)" }}
-              exit={{   y: -64, opacity: 0, filter: "blur(6px)" }}
-              transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
-            >
-              {greetings[greetingIdx]}.
-            </motion.span>
-          </AnimatePresence>
-        </div>
+        {/* Scroll indicator */}
+        <ScrollDots opacity={hintOpacity} />
 
-        {/* Headline */}
-        <motion.h1
-          className="font-extrabold text-[2rem] md:text-[2.75rem] text-ink leading-[1.15] tracking-tight max-w-2xl mb-5"
-          style={{ fontFamily: "var(--font-display)" }}
-          {...fadeUp(0.15)}
-        >
-          {t.headline}
-        </motion.h1>
+        {/* Content column */}
+        <div className="relative z-10 max-w-3xl mx-auto px-6 w-full">
 
-        {/* Subline */}
-        <motion.p
-          className="text-base md:text-[1.05rem] text-ink-mid leading-relaxed max-w-xl mb-10"
-          {...fadeUp(0.22)}
-        >
-          {t.subline}
-        </motion.p>
+          {/* Text group: badge + greeting + headline + subline */}
+          <motion.div style={{ y: textY }}>
 
-        {/* Form */}
-        <motion.form onSubmit={handleSubmit} noValidate {...fadeUp(0.3)}>
-          <div className="flex gap-3 flex-col sm:flex-row sm:items-stretch">
-            <div
-              className={[
-                "flex-1 flex items-center gap-3 bg-white rounded-xl px-4 shadow-sm border-2 transition-all",
-                error
-                  ? "border-red-400 focus-within:ring-4 focus-within:ring-red-100"
-                  : "border-border-subtle focus-within:border-brand-green focus-within:ring-4 focus-within:ring-[color-mix(in_srgb,var(--color-brand-green)_12%,transparent)] focus-within:shadow-md",
-              ].join(" ")}
-            >
-              <Globe className="w-5 h-5 text-ink-muted flex-shrink-0 pointer-events-none" aria-hidden />
-              <input
-                ref={inputRef}
-                type="url"
-                value={url}
-                onChange={(e) => { setUrl(e.target.value); clearError(); }}
-                placeholder={t.placeholder}
-                autoComplete="url"
-                spellCheck={false}
-                className="flex-1 py-4 bg-transparent outline-none text-[1rem] text-ink placeholder:text-ink-muted min-w-0"
-                aria-label={lang === "de" ? "Aktuelle Website-URL" : "Current website URL"}
-              />
+            {/* Badge */}
+            <motion.div {...fadeUp(0.05)}>
+              <span className="inline-flex items-center text-[11px] font-bold tracking-[0.1em] uppercase text-brand-green bg-brand-green-light rounded-full px-4 py-1.5 mb-8 select-none">
+                {t.badge}
+              </span>
+            </motion.div>
+
+            {/* Rotating greeting */}
+            <div className="h-16 md:h-[4.5rem] overflow-hidden flex items-center mb-3">
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={`${lang}-${greetingIdx}`}
+                  className="block font-extrabold text-5xl md:text-[3.75rem] leading-none tracking-tight text-brand-green"
+                  style={{ fontFamily: "var(--font-display)" }}
+                  initial={{ y: 64, opacity: 0, filter: "blur(6px)" }}
+                  animate={{ y: 0,  opacity: 1, filter: "blur(0px)" }}
+                  exit={{   y: -64, opacity: 0, filter: "blur(6px)" }}
+                  transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  {greetings[greetingIdx]}.
+                </motion.span>
+              </AnimatePresence>
             </div>
-            <button
-              type="submit"
-              className="flex-shrink-0 flex items-center justify-center gap-2 px-7 py-4 bg-brand-green text-white font-semibold rounded-xl shadow-[0_2px_12px_color-mix(in_srgb,var(--color-brand-green)_28%,transparent)] hover:bg-brand-green-hover hover:shadow-[0_4px_22px_color-mix(in_srgb,var(--color-brand-green)_40%,transparent)] active:translate-y-px transition-all cursor-pointer"
+
+            {/* Headline */}
+            <motion.h1
+              className="font-extrabold text-[2rem] md:text-[2.75rem] text-ink leading-[1.15] tracking-tight max-w-2xl mb-5"
               style={{ fontFamily: "var(--font-display)" }}
+              {...fadeUp(0.15)}
             >
-              {t.cta}
-              <ArrowRight className="w-4 h-4" aria-hidden />
+              {t.headline}
+            </motion.h1>
+
+            {/* Subline */}
+            <motion.p
+              className="text-base md:text-[1.05rem] text-ink-mid leading-relaxed max-w-xl"
+              {...fadeUp(0.22)}
+            >
+              {t.subline}
+            </motion.p>
+          </motion.div>
+
+          {/* Form group: scroll-revealed ─────────────────────────────── */}
+          <motion.div
+            style={{
+              opacity: formOpacity,
+              y: formY,
+              pointerEvents: formPointerEvents,
+            }}
+            className="mt-10"
+          >
+            <form onSubmit={handleSubmit} noValidate>
+              <div className="flex gap-3 flex-col sm:flex-row sm:items-stretch">
+                <div
+                  className={[
+                    "flex-1 flex items-center gap-3 bg-white rounded-xl px-4 shadow-sm border-2 transition-all",
+                    error
+                      ? "border-red-400 focus-within:ring-4 focus-within:ring-red-100"
+                      : "border-border-subtle focus-within:border-brand-green focus-within:ring-4 focus-within:ring-[color-mix(in_srgb,var(--color-brand-green)_12%,transparent)] focus-within:shadow-md",
+                  ].join(" ")}
+                >
+                  <Globe className="w-5 h-5 text-ink-muted flex-shrink-0 pointer-events-none" aria-hidden />
+                  <input
+                    ref={inputRef}
+                    type="url"
+                    value={url}
+                    onChange={(e) => { setUrl(e.target.value); clearError(); }}
+                    placeholder={t.placeholder}
+                    autoComplete="url"
+                    spellCheck={false}
+                    className="flex-1 py-4 bg-transparent outline-none text-[1rem] text-ink placeholder:text-ink-muted min-w-0"
+                    aria-label={lang === "de" ? "Aktuelle Website-URL" : "Current website URL"}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="flex-shrink-0 flex items-center justify-center gap-2 px-7 py-4 bg-brand-green text-white font-semibold rounded-xl shadow-[0_2px_12px_color-mix(in_srgb,var(--color-brand-green)_28%,transparent)] hover:bg-brand-green-hover hover:shadow-[0_4px_22px_color-mix(in_srgb,var(--color-brand-green)_40%,transparent)] active:translate-y-px transition-all cursor-pointer"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  {t.cta}
+                  <ArrowRight className="w-4 h-4" aria-hidden />
+                </button>
+              </div>
+
+              <AnimatePresence>
+                {error && (
+                  <motion.p
+                    role="alert" aria-live="polite"
+                    initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                    transition={{ duration: 0.18 }}
+                    className="mt-2.5 text-sm text-red-600"
+                  >
+                    {error}
+                  </motion.p>
+                )}
+              </AnimatePresence>
+            </form>
+
+            {/* Alt link */}
+            <button
+              type="button"
+              className="mt-5 block text-sm text-ink-muted underline underline-offset-[5px] decoration-border-subtle hover:text-ink-mid hover:decoration-ink-mid transition-all cursor-pointer"
+            >
+              {t.altLink}
             </button>
-          </div>
+          </motion.div>
 
-          <AnimatePresence>
-            {error && (
-              <motion.p
-                role="alert" aria-live="polite"
-                initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                transition={{ duration: 0.18 }}
-                className="mt-2.5 text-sm text-red-600"
-              >
-                {error}
-              </motion.p>
-            )}
-          </AnimatePresence>
-        </motion.form>
-
-        {/* Alt link */}
-        <motion.button
-          type="button"
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-          transition={{ delay: 0.5, duration: 0.3 }}
-          className="mt-5 block text-sm text-ink-muted underline underline-offset-[5px] decoration-border-subtle hover:text-ink-mid hover:decoration-ink-mid transition-all cursor-pointer"
-        >
-          {t.altLink}
-        </motion.button>
+        </div>
       </div>
 
       {/* Game overlay — mounts on valid submit, redirects to /generator on complete */}
