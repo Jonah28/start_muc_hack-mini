@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { AuroraButton } from "@/components/ui/aurora-button";
 import { AnimatedHero } from "@/components/ui/animated-hero";
 import { TrustedBy } from "@/components/ui/trusted-by";
 import { HowItWorks } from "@/components/ui/how-it-works";
@@ -59,13 +60,12 @@ export default function Home() {
       >
         <div className="max-w-3xl mx-auto px-6 h-16 flex items-center justify-between">
           <NavLogo />
-          <button
+          <AuroraButton
             onClick={() => setLang((l) => (l === "de" ? "en" : "de"))}
-            className="text-[11px] font-bold tracking-widest text-ink-muted border border-border-subtle rounded-md px-3 py-1.5 hover:border-brand-green hover:text-brand-green hover:bg-brand-green-light transition-all cursor-pointer"
             aria-label="Switch language"
           >
             {lang === "de" ? "EN" : "DE"}
-          </button>
+          </AuroraButton>
         </div>
       </header>
 
