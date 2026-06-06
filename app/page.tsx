@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { AnimatedHero } from "@/components/ui/animated-hero";
 import { HowItWorks } from "@/components/ui/how-it-works";
+import { TestimonialsSection } from "@/components/ui/testimonials-section";
 import { AboutSection } from "@/components/ui/about-section";
 
 type Lang = "de" | "en";
@@ -71,6 +72,7 @@ export default function Home() {
       <main className="flex-1">
         <AnimatedHero lang={lang} onLangChange={setLang} />
         <HowItWorks lang={lang} />
+        <TestimonialsSection lang={lang} />
         <AboutSection lang={lang} />
       </main>
 
