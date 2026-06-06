@@ -47,20 +47,20 @@ const copy = {
 
 /* ── Floating emoji layer ──────────────────────────────────────────────── */
 const TRADE_EMOJIS = [
-  { emoji: "🔨", label: "Zimmermann",  x: "3%",  baseY: "18%", speed: 0.55, mountDelay: 0.10, rotate0: -18, rotate1: 12 },
-  { emoji: "🔧", label: "Klempner",    x: "85%", baseY: "10%", speed: 0.40, mountDelay: 0.05, rotate0:  10, rotate1: -8 },
-  { emoji: "⛑️", label: "Bauleiter",   x: "80%", baseY: "52%", speed: 0.70, mountDelay: 0.20, rotate0: -10, rotate1: 14 },
-  { emoji: "🧱", label: "Maurer",      x: "5%",  baseY: "62%", speed: 0.50, mountDelay: 0.25, rotate0:   8, rotate1: -12 },
-  { emoji: "🪚", label: "Schreiner",   x: "88%", baseY: "75%", speed: 0.65, mountDelay: 0.15, rotate0: -14, rotate1: 10 },
-  { emoji: "🏗️", label: "Baustelle",   x: "44%", baseY: "2%",  speed: 0.35, mountDelay: 0.08, rotate0:   6, rotate1: -10 },
-  { emoji: "🔩", label: "Metallbauer", x: "1%",  baseY: "40%", speed: 0.45, mountDelay: 0.30, rotate0: -20, rotate1: 16 },
-  { emoji: "🪛", label: "Elektriker",  x: "67%", baseY: "88%", speed: 0.60, mountDelay: 0.18, rotate0:  12, rotate1: -14 },
+  { emoji: "🔨", de: "Zimmermann",  en: "Carpenter",    x: "3%",  baseY: "18%", speed: 0.55, mountDelay: 0.10, rotate0: -18, rotate1: 12 },
+  { emoji: "🔧", de: "Klempner",    en: "Plumber",      x: "85%", baseY: "10%", speed: 0.40, mountDelay: 0.05, rotate0:  10, rotate1: -8 },
+  { emoji: "⛑️", de: "Bauleiter",   en: "Site Manager", x: "80%", baseY: "52%", speed: 0.70, mountDelay: 0.20, rotate0: -10, rotate1: 14 },
+  { emoji: "🧱", de: "Maurer",      en: "Bricklayer",   x: "5%",  baseY: "62%", speed: 0.50, mountDelay: 0.25, rotate0:   8, rotate1: -12 },
+  { emoji: "🪚", de: "Schreiner",   en: "Carpenter",    x: "88%", baseY: "75%", speed: 0.65, mountDelay: 0.15, rotate0: -14, rotate1: 10 },
+  { emoji: "🏗️", de: "Baustelle",   en: "Construction", x: "44%", baseY: "2%",  speed: 0.35, mountDelay: 0.08, rotate0:   6, rotate1: -10 },
+  { emoji: "🔩", de: "Metallbauer", en: "Metal Worker", x: "1%",  baseY: "40%", speed: 0.45, mountDelay: 0.30, rotate0: -20, rotate1: 16 },
+  { emoji: "🪛", de: "Elektriker",  en: "Electrician",  x: "67%", baseY: "88%", speed: 0.60, mountDelay: 0.18, rotate0:  12, rotate1: -14 },
 ];
 
 function FloatingEmoji({
-  emoji, label, x, baseY, speed, mountDelay, rotate0, rotate1, scrollYProgress,
+  emoji, de, en, lang, x, baseY, speed, mountDelay, rotate0, rotate1, scrollYProgress,
 }: {
-  emoji: string; label: string; x: string; baseY: string; speed: number;
+  emoji: string; de: string; en: string; lang: Lang; x: string; baseY: string; speed: number;
   mountDelay: number; rotate0: number; rotate1: number;
   scrollYProgress: ReturnType<typeof useScroll>["scrollYProgress"];
 }) {
@@ -88,7 +88,7 @@ function FloatingEmoji({
         className="text-[10px] font-bold tracking-widest uppercase text-ink-mid/70 bg-white/60 backdrop-blur-sm rounded-full px-2.5 py-0.5 border border-white/60"
         style={{ fontFamily: "var(--font-display)", letterSpacing: "0.12em" }}
       >
-        {label}
+        {lang === "de" ? de : en}
       </span>
     </motion.div>
   );
@@ -220,7 +220,7 @@ export function AnimatedHero({ lang, onLangChange }: HeroProps) {
 
         {/* Floating emoji layer — inside sticky so they stay visible */}
         {TRADE_EMOJIS.map((e) => (
-          <FloatingEmoji key={e.emoji} {...e} scrollYProgress={scrollYProgress} />
+          <FloatingEmoji key={e.emoji} {...e} lang={lang} scrollYProgress={scrollYProgress} />
         ))}
 
         {/* Scroll indicator */}
