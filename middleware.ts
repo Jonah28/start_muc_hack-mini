@@ -16,7 +16,14 @@ export function middleware(request: NextRequest) {
   }
 
   const slug = hostToSlug(request.headers.get("host") || "", ROOT_DOMAIN);
-  if (!slug) return NextResponse.next();
+  if (!slug) {
+    if (pathname === "/") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/werkseite-classic.html";
+      return NextResponse.rewrite(url);
+    }
+    return NextResponse.next();
+  }
 
   const url = request.nextUrl.clone();
   url.pathname = `/sites/${slug}${pathname === "/" ? "" : pathname}`;
