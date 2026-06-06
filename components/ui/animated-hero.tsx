@@ -52,7 +52,7 @@ const TRADE_EMOJIS = [
   { emoji: "⛑️", de: "Bauleiter",   en: "Site Manager", x: "80%", baseY: "52%", speed: 0.70, mountDelay: 0.20, rotate0: -10, rotate1: 14 },
   { emoji: "🧱", de: "Maurer",      en: "Bricklayer",   x: "5%",  baseY: "62%", speed: 0.50, mountDelay: 0.25, rotate0:   8, rotate1: -12 },
   { emoji: "🪚", de: "Schreiner",   en: "Carpenter",    x: "88%", baseY: "75%", speed: 0.65, mountDelay: 0.15, rotate0: -14, rotate1: 10 },
-  { emoji: "🏗️", de: "Baustelle",   en: "Construction", x: "44%", baseY: "2%",  speed: 0.35, mountDelay: 0.08, rotate0:   6, rotate1: -10 },
+  { emoji: "🏗️", de: "Baustelle",   en: "Construction", x: "44%", baseY: "10%", speed: 0.35, mountDelay: 0.08, rotate0:   6, rotate1: -10 },
   { emoji: "🔩", de: "Metallbauer", en: "Metal Worker", x: "1%",  baseY: "40%", speed: 0.45, mountDelay: 0.30, rotate0: -20, rotate1: 16 },
   { emoji: "🪛", de: "Elektriker",  en: "Electrician",  x: "67%", baseY: "88%", speed: 0.60, mountDelay: 0.18, rotate0:  12, rotate1: -14 },
 ];

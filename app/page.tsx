@@ -152,8 +152,10 @@ export default function Home() {
   const [pastHero,  setPastHero]  = useState(false);
 
   const { scrollY } = useScroll();
-  const sectionNavOpacity = useTransform(scrollY, [0, 100], [1, 0]);
-  const sectionNavX       = useTransform(scrollY, [0, 100], [0, -32]);
+  /* Pill nav: invisible at top (white-on-white), fades IN once dark glass
+     starts (~15px), holds, then fades OUT before pastHero threshold */
+  const sectionNavOpacity = useTransform(scrollY, [0, 15, 75, 110], [0, 1, 1, 0]);
+  const sectionNavX       = useTransform(scrollY, [75, 110], [0, -32]);
 
   useEffect(() => {
     const onScroll = () => {
