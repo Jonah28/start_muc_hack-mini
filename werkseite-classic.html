@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" id="html-root">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width">
 
-  <!-- ── SEO (proper, despite everything else) ────────────────────── -->
+  <!-- ── SEO ──────────────────────────────────────────────────────── -->
   <title>Werkseite.org - Neue Website für Handwerker in 5 Minuten erstellen</title>
-  <meta name="description" content="Werkseite.org erstellt automatisch eine moderne Handwerker-Website aus Ihrer alten Seite. Einfach URL eingeben – fertig! Für Klempner, Elektriker, Zimmermann und alle Handwerksbetriebe in Deutschland.">
-  <meta name="keywords" content="Handwerker Website erstellen, Klempner Website kostenlos, Elektriker Homepage, Zimmermann Website günstig, Handwerk Website automatisch">
+  <meta name="description" content="Werkseite.org erstellt automatisch eine moderne Handwerker-Website aus Ihrer alten Seite. Einfach URL eingeben – fertig!">
+  <meta name="keywords" content="Handwerker Website erstellen, Klempner Website kostenlos, Elektriker Homepage, Zimmermann Website günstig">
   <meta property="og:title" content="Werkseite.org – Ihre neue Handwerker-Website in Minuten!">
-  <meta property="og:description" content="Einfach alte URL eingeben, neue professionelle Website erhalten. Für alle Handwerksbetriebe in Deutschland.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://werkseite.org">
   <link rel="canonical" href="https://werkseite.org">
@@ -29,28 +28,26 @@
   </script>
 
   <style>
-    /* ── Reset ──────────────────────────────────────────────────────── */
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: Arial, Helvetica, sans-serif;
       font-size: 13px;
-      color: #333333;
+      color: #333;
       background: #9999aa;
       min-height: 100vh;
     }
 
     a { color: #1c3468; }
 
-    /* ── Fixed-width centered wrapper ───────────────────────────────── */
     .wrapper {
       width: 800px;
       margin: 0 auto;
-      background: #ffffff;
+      background: #fff;
       box-shadow: 0 0 8px rgba(0,0,0,0.4);
     }
 
-    /* ── Photo strip ─────────────────────────────────────────────────── */
+    /* ── Photo strip ─────────────────────────────────────────────── */
     .photo-strip {
       display: flex;
       height: 110px;
@@ -64,62 +61,50 @@
       border-right: 2px solid #fff;
     }
     .photo-cell:last-child { border-right: none; }
-    .photo-cell .overlay {
-      position: absolute; inset: 0;
-      display: flex; align-items: flex-end;
-      padding: 4px 5px;
+    .photo-cell img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(0.7) brightness(0.85);
     }
-    .photo-cell .overlay span {
-      font-size: 9px; font-weight: bold; color: rgba(255,255,255,0.9);
-      text-transform: uppercase; letter-spacing: 0.05em;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    .photo-cell .label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(28, 52, 104, 0.72);
+      color: #fff;
+      font-size: 9px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      padding: 3px 5px;
+      text-align: center;
     }
-    /* Each "photo" is a CSS gradient mimicking a real photo */
-    .p1 { background: linear-gradient(160deg, #0a0a2e 0%, #1a1a6e 40%, #3a5fcd 100%); }
-    .p2 { background: linear-gradient(160deg, #0d2b1a 0%, #1a5c3a 50%, #2d8a58 100%); }
-    .p3 { background: linear-gradient(160deg, #2a0800 0%, #8b1a00 40%, #cc3300 70%, #ff6600 100%); }
-    .p4 { background: linear-gradient(160deg, #001a2e 0%, #003355 50%, #0066aa 100%); }
-    .p5 { background: linear-gradient(160deg, #0a0a1e 0%, #1a2a5e 50%, #2244aa 100%); }
-    .p6 { background: linear-gradient(160deg, #1a1a1a 0%, #2a3a4a 50%, #445566 100%); }
 
-    /* Photo pseudo-content using ::before pseudo-element textures */
-    .p1::before { content: '⚡'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 42px; opacity: 0.35; }
-    .p2::before { content: '🏗️'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 42px; opacity: 0.35; }
-    .p3::before { content: '🔦'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 42px; opacity: 0.35; }
-    .p4::before { content: '🔧'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 42px; opacity: 0.35; }
-    .p5::before { content: '🏢'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 42px; opacity: 0.35; }
-    .p6::before { content: '🤝'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 42px; opacity: 0.35; }
-
-    /* ── Horizontal nav bar ─────────────────────────────────────────── */
+    /* ── Nav bar ─────────────────────────────────────────────────── */
     .nav-bar {
       background: #1c3468;
       display: flex;
       border-bottom: 3px solid #e8a020;
     }
     .nav-bar a {
-      flex: 1;
-      color: #ffffff;
-      text-decoration: none;
-      text-align: center;
-      padding: 10px 4px;
-      font-weight: bold;
-      font-size: 13px;
+      flex: 1; color: #fff; text-decoration: none;
+      text-align: center; padding: 10px 4px;
+      font-weight: bold; font-size: 13px;
       border-right: 1px solid #2a4a8a;
     }
     .nav-bar a:last-child { border-right: none; }
-    .nav-bar a:hover   { background: #2a4a8a; }
-    .nav-bar a.active  { background: #e8a020; }
+    .nav-bar a:hover { background: #2a4a8a; }
+    .nav-bar a.active { background: #e8a020; }
 
-    /* ── Logo / contact area ────────────────────────────────────────── */
+    /* ── Logo area ───────────────────────────────────────────────── */
     .logo-area {
       background: #e8e8e8;
-      border-bottom: 2px solid #cccccc;
+      border-bottom: 2px solid #ccc;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 14px 18px;
     }
-    .logo-left { display: flex; flex-direction: column; }
     .logo-eyebrow {
       font-size: 9px; font-weight: bold; letter-spacing: 0.18em;
       text-transform: uppercase; color: #666; margin-bottom: 2px;
@@ -134,285 +119,242 @@
     .logo-right a { color: #1c3468; text-decoration: none; }
     .logo-right a:hover { text-decoration: underline; }
 
-    /* ── Three-column main area ─────────────────────────────────────── */
+    /* ── Three-column ────────────────────────────────────────────── */
     .main-layout {
       display: flex;
       align-items: stretch;
-      min-height: 400px;
+      min-height: 420px;
       border-top: 1px solid #ddd;
     }
 
-    /* ── Left sidebar ───────────────────────────────────────────────── */
+    /* ── Left sidebar ────────────────────────────────────────────── */
     .sidebar-left {
-      width: 150px;
-      flex-shrink: 0;
+      width: 150px; flex-shrink: 0;
       background: #1c3468;
       border-right: 2px solid #e8a020;
     }
     .sidebar-nav a {
-      display: block;
-      color: #ccd6ee;
-      text-decoration: none;
-      padding: 9px 12px;
-      font-size: 13px;
+      display: block; color: #ccd6ee; text-decoration: none;
+      padding: 9px 12px; font-size: 13px;
       border-bottom: 1px solid #2a4a8a;
-      font-weight: normal;
     }
-    .sidebar-nav a.active {
-      background: #e8a020;
-      color: #ffffff;
-      font-weight: bold;
-    }
+    .sidebar-nav a.active { background: #e8a020; color: #fff; font-weight: bold; }
     .sidebar-nav a:hover:not(.active) { background: #2a4a8a; color: #fff; }
-
     .sidebar-cert {
-      margin: 10px 8px;
-      background: #fff;
-      border: 1px solid #e8a020;
-      border-radius: 2px;
-      padding: 6px;
-      text-align: center;
-      font-size: 9px;
-      font-weight: bold;
-      color: #1c3468;
-      line-height: 1.4;
+      margin: 10px 8px; background: #fff;
+      border: 1px solid #e8a020; border-radius: 2px;
+      padding: 6px; text-align: center;
+      font-size: 9px; font-weight: bold; color: #1c3468; line-height: 1.4;
     }
-    .sidebar-cert .cert-icon { font-size: 18px; display: block; }
+    .sidebar-cert .ci { font-size: 18px; display: block; }
     .sidebar-cert-label {
       color: #fff; font-size: 9px; font-weight: bold;
       padding: 3px 8px; background: #e8a020; text-align: center;
       margin: 8px -8px -6px -8px; letter-spacing: 0.05em;
     }
 
-    /* ── Center content ─────────────────────────────────────────────── */
-    .main-content {
-      flex: 1;
-      padding: 18px 22px;
-      background: #fff;
-    }
+    /* ── Center content ──────────────────────────────────────────── */
+    .main-content { flex: 1; padding: 18px 22px; background: #fff; }
     .main-content h1 {
-      font-size: 20px;
-      font-weight: bold;
-      color: #1c3468;
-      margin-bottom: 14px;
-      line-height: 1.3;
-      border-bottom: 2px solid #e8a020;
-      padding-bottom: 8px;
+      font-size: 20px; font-weight: bold; color: #1c3468;
+      margin-bottom: 14px; line-height: 1.3;
+      border-bottom: 2px solid #e8a020; padding-bottom: 8px;
     }
     .main-content p {
-      margin-bottom: 12px;
-      line-height: 1.6;
-      font-size: 13px;
-      color: #333;
-    }
-    .main-content .mehr {
-      color: #1c3468;
-      text-decoration: underline;
-      font-size: 13px;
+      margin-bottom: 12px; line-height: 1.6; font-size: 13px; color: #333;
     }
 
-    /* ── URL form — intentionally default/unstyled ──────────────────── */
+    /* ── URL form — default browser feel ────────────────────────── */
     .url-section {
-      margin: 14px 0;
-      padding: 12px;
-      background: #f0f4ff;
-      border: 1px solid #1c3468;
+      margin: 14px 0; padding: 12px;
+      background: #f0f4ff; border: 1px solid #1c3468;
     }
     .url-section label {
-      display: block;
-      font-weight: bold;
-      color: #1c3468;
-      margin-bottom: 6px;
-      font-size: 13px;
+      display: block; font-weight: bold; color: #1c3468;
+      margin-bottom: 6px; font-size: 13px;
     }
     .url-section input[type="text"] {
-      width: 280px;
-      padding: 3px 4px;
-      border: 1px inset #888;
-      font-size: 12px;
-      font-family: Arial, sans-serif;
-      margin-right: 6px;
+      width: 270px; padding: 3px 4px;
+      border: 1px inset #888; font-size: 12px;
+      font-family: Arial, sans-serif; margin-right: 6px;
     }
     .url-section input[type="submit"] {
-      padding: 3px 14px;
-      background: #1c3468;
-      color: #ffffff;
-      border: 2px outset #2a4a8a;
-      font-size: 12px;
-      font-family: Arial, sans-serif;
-      cursor: pointer;
-      font-weight: bold;
+      padding: 3px 14px; background: #1c3468; color: #fff;
+      border: 2px outset #2a4a8a; font-size: 12px;
+      font-family: Arial, sans-serif; cursor: pointer; font-weight: bold;
     }
-    .url-section input[type="submit"]:active {
-      border-style: inset;
-    }
-    .url-note {
-      font-size: 11px;
-      color: #666;
-      margin-top: 5px;
-    }
+    .url-section input[type="submit"]:active { border-style: inset; }
+    .url-note { font-size: 11px; color: #666; margin-top: 5px; }
 
-    /* ── Right sidebar ──────────────────────────────────────────────── */
-    .sidebar-right {
-      width: 190px;
-      flex-shrink: 0;
-      border-left: 1px solid #ddd;
+    /* ── Ugly lang toggle — the joke ────────────────────────────── */
+    .lang-toggle-wrap {
+      text-align: center;
+      margin: 10px 0 4px 0;
     }
+    #lang-btn {
+      font-size: 9px;
+      font-family: Arial, sans-serif;
+      padding: 1px 5px;
+      background: #cccccc;
+      color: #333;
+      border: 1px outset #aaaaaa;
+      cursor: pointer;
+      letter-spacing: 0;
+      line-height: 1.2;
+    }
+    #lang-btn:active { border-style: inset; }
+
+    /* ── Right sidebar ───────────────────────────────────────────── */
+    .sidebar-right { width: 190px; flex-shrink: 0; border-left: 1px solid #ddd; }
     .right-photo {
-      width: 100%;
-      height: 160px;
-      background: linear-gradient(160deg, #001a3a 0%, #0d2b6b 50%, #1a4aaa 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 56px;
-      position: relative;
-      overflow: hidden;
+      width: 100%; height: 160px; overflow: hidden;
     }
-    .right-photo::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.6) 100%);
+    .right-photo img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: saturate(0.5) hue-rotate(200deg) brightness(0.8);
     }
     .right-photo-caption {
-      font-size: 12px;
-      color: #1c3468;
-      padding: 8px 10px;
-      line-height: 1.4;
-      font-style: italic;
-      border-bottom: 1px solid #ddd;
+      font-size: 12px; color: #1c3468; padding: 8px 10px;
+      line-height: 1.4; font-style: italic; border-bottom: 1px solid #ddd;
     }
     .right-info {
-      padding: 8px 10px;
-      font-size: 11px;
-      color: #555;
-      line-height: 1.5;
+      padding: 8px 10px; font-size: 11px; color: #555; line-height: 1.5;
     }
     .right-info strong { color: #1c3468; display: block; margin-bottom: 3px; }
 
-    /* ── FAQ section ────────────────────────────────────────────────── */
-    .faq-section { margin-top: 16px; }
-    .faq-section h2 {
+    /* ── Guestbook ───────────────────────────────────────────────── */
+    .section-head {
       font-size: 14px; font-weight: bold; color: #fff;
-      background: #1c3468; padding: 5px 8px; margin-bottom: 8px;
-    }
-    .faq-q { font-weight: bold; color: #1c3468; margin: 8px 0 3px 0; font-size: 12px; }
-    .faq-a { margin-left: 10px; font-size: 12px; color: #333; margin-bottom: 6px; line-height: 1.5; }
-
-    /* ── Guestbook ──────────────────────────────────────────────────── */
-    .guest-section { margin-top: 14px; }
-    .guest-section h2 {
-      font-size: 14px; font-weight: bold; color: #fff;
-      background: #1c3468; padding: 5px 8px; margin-bottom: 8px;
+      background: #1c3468; padding: 5px 8px; margin: 14px 0 8px 0;
     }
     .guest-entry {
-      border: 1px solid #ccd;
-      padding: 7px 10px;
-      margin-bottom: 7px;
-      background: #f5f5ff;
-      font-size: 12px;
+      border: 1px solid #ccd; padding: 7px 10px;
+      margin-bottom: 7px; background: #f5f5ff; font-size: 12px;
     }
     .guest-name { font-weight: bold; color: #1c3468; }
     .guest-stars { color: #e8a020; letter-spacing: 1px; }
     .guest-text { margin-top: 3px; color: #333; line-height: 1.4; }
     .guest-date { font-size: 10px; color: #888; margin-top: 3px; }
 
-    /* ── Footer ─────────────────────────────────────────────────────── */
+    /* ── FAQ ─────────────────────────────────────────────────────── */
+    .faq-q { font-weight: bold; color: #1c3468; margin: 8px 0 3px 0; font-size: 12px; }
+    .faq-a { margin-left: 10px; font-size: 12px; color: #333; margin-bottom: 6px; line-height: 1.5; }
+
+    /* ── Footer ──────────────────────────────────────────────────── */
     .footer {
-      background: #e8e8e8;
-      border-top: 2px solid #1c3468;
-      padding: 10px;
-      text-align: center;
-      font-size: 12px;
+      background: #e8e8e8; border-top: 2px solid #1c3468;
+      padding: 10px; text-align: center; font-size: 12px;
     }
-    .footer a {
-      color: #1c3468;
-      text-decoration: underline;
-      margin: 0 10px;
-    }
+    .footer a { color: #1c3468; text-decoration: underline; margin: 0 10px; }
+
+    /* ── i18n: hide/show elements by lang ───────────────────────── */
+    [data-lang] { display: none; }
+    .lang-de [data-lang="de"],
+    .lang-en [data-lang="en"] { display: inline; }
+    /* block-level overrides */
+    div[data-lang], p[data-lang], h1[data-lang],
+    div[data-lang="de"], div[data-lang="en"] { display: none; }
+    .lang-de div[data-lang="de"],
+    .lang-de p[data-lang="de"],
+    .lang-de h1[data-lang="de"],
+    .lang-en div[data-lang="en"],
+    .lang-en p[data-lang="en"],
+    .lang-en h1[data-lang="en"] { display: block; }
   </style>
 </head>
 <body>
 
-<div class="wrapper">
+<div class="wrapper lang-de" id="wrapper">
 
-  <!-- ── Photo strip ────────────────────────────────────────────────── -->
+  <!-- ── Photo strip ──────────────────────────────────────────────── -->
   <div class="photo-strip">
-    <div class="photo-cell p1">
-      <div class="overlay"><span>Schnell</span></div>
+    <div class="photo-cell">
+      <img src="classic-assets/schnell.webp" alt="Schnell">
+      <div class="label" data-lang="de">Schnell</div>
+      <div class="label" data-lang="en">Fast</div>
     </div>
-    <div class="photo-cell p2">
-      <div class="overlay"><span>Modern</span></div>
+    <div class="photo-cell">
+      <img src="classic-assets/modern.webp" alt="Modern">
+      <div class="label" data-lang="de">Modern</div>
+      <div class="label" data-lang="en">Modern</div>
     </div>
-    <div class="photo-cell p3">
-      <div class="overlay"><span>Sichtbar</span></div>
+    <div class="photo-cell">
+      <img src="classic-assets/sichtbar.jpg" alt="Sichtbar">
+      <div class="label" data-lang="de">Sichtbar</div>
+      <div class="label" data-lang="en">Visible</div>
     </div>
-    <div class="photo-cell p4">
-      <div class="overlay"><span>Digital</span></div>
+    <div class="photo-cell">
+      <img src="classic-assets/digital.jpg" alt="Digital">
+      <div class="label" data-lang="de">Digital</div>
+      <div class="label" data-lang="en">Digital</div>
     </div>
-    <div class="photo-cell p5">
-      <div class="overlay"><span>Professionell</span></div>
+    <div class="photo-cell">
+      <img src="classic-assets/professionell.jpg" alt="Professionell">
+      <div class="label" data-lang="de">Professionell</div>
+      <div class="label" data-lang="en">Professional</div>
     </div>
-    <div class="photo-cell p6">
-      <div class="overlay"><span>Service</span></div>
+    <div class="photo-cell">
+      <img src="classic-assets/service.jpg" alt="Service">
+      <div class="label" data-lang="de">Service</div>
+      <div class="label" data-lang="en">Service</div>
     </div>
   </div>
 
-  <!-- ── Horizontal nav ────────────────────────────────────────────── -->
+  <!-- ── Nav bar ──────────────────────────────────────────────────── -->
   <div class="nav-bar">
-    <a href="#" class="active">Startseite</a>
-    <a href="#wie">Wie es geht</a>
-    <a href="#fuer-wen">Für wen?</a>
-    <a href="#gaestebuch">Gästebuch</a>
+    <a href="#" class="active"><span data-lang="de">Startseite</span><span data-lang="en">Home</span></a>
+    <a href="#wie"><span data-lang="de">Wie es geht</span><span data-lang="en">How it works</span></a>
+    <a href="#fuer-wen"><span data-lang="de">Für wen?</span><span data-lang="en">For whom?</span></a>
+    <a href="#gaestebuch"><span data-lang="de">Gästebuch</span><span data-lang="en">Guestbook</span></a>
     <a href="#faq">FAQ</a>
-    <a href="#">Preise</a>
-    <a href="#">Kontakt</a>
+    <a href="#"><span data-lang="de">Preise</span><span data-lang="en">Pricing</span></a>
+    <a href="#"><span data-lang="de">Kontakt</span><span data-lang="en">Contact</span></a>
   </div>
 
-  <!-- ── Logo / contact area ───────────────────────────────────────── -->
+  <!-- ── Logo area ────────────────────────────────────────────────── -->
   <div class="logo-area">
-    <div class="logo-left">
-      <div class="logo-eyebrow">Ihr Partner für den digitalen Handwerk-Auftritt</div>
+    <div>
+      <div class="logo-eyebrow">
+        <span data-lang="de">Ihr Partner für den digitalen Handwerk-Auftritt</span>
+        <span data-lang="en">Your partner for digital trade presence</span>
+      </div>
       <div class="logo-wordmark">WERKSEITE<span>.ORG</span></div>
     </div>
     <div class="logo-right">
       <div class="company">Werkseite.org GmbH</div>
-      <div>Musterstraße 12 &nbsp;·&nbsp; 80331 München</div>
-      <div>Telefon &nbsp;&nbsp;&nbsp; <strong>089 / 123 45 67</strong></div>
-      <div>E-Mail &nbsp;&nbsp;&nbsp;&nbsp; <a href="mailto:info@werkseite.org">info@werkseite.org</a></div>
+      <div>Musterstraße 12 · 80331 München</div>
+      <div><span data-lang="de">Telefon</span><span data-lang="en">Phone</span> &nbsp;&nbsp; <strong>089 / 123 45 67</strong></div>
+      <div>E-Mail &nbsp;&nbsp; <a href="mailto:info@werkseite.org">info@werkseite.org</a></div>
     </div>
   </div>
 
-  <!-- ── Three-column main ─────────────────────────────────────────── -->
+  <!-- ── Three-column main ────────────────────────────────────────── -->
   <div class="main-layout">
 
     <!-- Left sidebar -->
     <div class="sidebar-left">
       <div class="sidebar-nav">
-        <a href="#" class="active">Home</a>
-        <a href="#wie">Wie es geht</a>
-        <a href="#fuer-wen">Für wen?</a>
-        <a href="#gaestebuch">Gästebuch</a>
+        <a href="#" class="active"><span data-lang="de">Home</span><span data-lang="en">Home</span></a>
+        <a href="#wie"><span data-lang="de">Wie es geht</span><span data-lang="en">How it works</span></a>
+        <a href="#fuer-wen"><span data-lang="de">Für wen?</span><span data-lang="en">For whom?</span></a>
+        <a href="#gaestebuch"><span data-lang="de">Gästebuch</span><span data-lang="en">Guestbook</span></a>
         <a href="#faq">FAQ</a>
-        <a href="#">Preise</a>
-        <a href="#">Kontakt</a>
-        <a href="#">Impressum</a>
+        <a href="#"><span data-lang="de">Preise</span><span data-lang="en">Pricing</span></a>
+        <a href="#"><span data-lang="de">Kontakt</span><span data-lang="en">Contact</span></a>
+        <a href="#"><span data-lang="de">Impressum</span><span data-lang="en">Legal notice</span></a>
       </div>
 
       <div class="sidebar-cert">
-        <span class="cert-icon">🏆</span>
+        <span class="ci">🏆</span>
         Startup Award<br>München 2025
       </div>
-
       <div class="sidebar-cert">
-        <span class="cert-icon">🇩🇪</span>
+        <span class="ci">🇩🇪</span>
         Made in<br>Germany
         <div class="sidebar-cert-label">QUALITÄT</div>
       </div>
-
       <div class="sidebar-cert">
-        <span class="cert-icon">🔒</span>
+        <span class="ci">🔒</span>
         DSGVO<br>konform
       </div>
     </div>
@@ -420,134 +362,199 @@
     <!-- Center content -->
     <div class="main-content">
 
-      <h1>Wir erstellen Ihre neue Handwerker-Website<br>automatisch – in nur 5 Minuten!</h1>
+      <h1 data-lang="de">Wir erstellen Ihre neue Handwerker-Website automatisch – in nur 5 Minuten!</h1>
+      <h1 data-lang="en">We create your new tradesperson website automatically – in just 5 minutes!</h1>
 
-      <p>
+      <p data-lang="de">
         Als Handwerksbetrieb brauchen Sie keine schlechte oder veraltete Website mehr.
         Mit Werkseite.org geben Sie einfach die Adresse Ihrer alten Homepage ein —
-        unsere Technologie liest alles automatisch aus und erstellt daraus eine komplett
+        unsere Technologie liest alles automatisch aus und erstellt daraus eine
         neue, moderne und professionelle Website für Ihren Betrieb.
       </p>
-
-      <p>
-        Unseren Kunden stehen wir von der einfachen Visitenkarten-Website bis hin zu
-        vollständigen Online-Auftritten mit Anfrage-Formular, Google-Optimierung und
-        mobilem Design zur Seite — mit individuell auf Ihren Betrieb zugeschnittenen Lösungen.
+      <p data-lang="en">
+        As a trade business you no longer need a bad or outdated website.
+        With Werkseite.org simply enter the address of your old homepage —
+        our technology reads everything automatically and creates a new,
+        modern and professional website for your business.
       </p>
 
-      <!-- URL form — default browser styling is intentional -->
+      <p data-lang="de">
+        Unseren Kunden stehen wir von der einfachen Visitenkarten-Website bis hin zu
+        vollständigen Online-Auftritten mit Anfrage-Formular, Google-Optimierung und
+        mobilem Design zur Seite — individuell auf Ihren Betrieb zugeschnitten.
+      </p>
+      <p data-lang="en">
+        We support our customers from a simple business-card website all the way to
+        full online presences with contact forms, Google optimisation and mobile
+        design — individually tailored to your business.
+      </p>
+
+      <!-- URL form -->
       <div id="wie" class="url-section">
-        <label>Ihre alte Website-Adresse eingeben:</label>
+        <label data-lang="de">Ihre alte Website-Adresse eingeben:</label>
+        <label data-lang="en">Enter your old website address:</label>
         <input type="text" name="url" placeholder="z.B.  http://www.ihr-betrieb.de" />
-        <input type="submit" value="Website erstellen" onclick="alert('Bitte warten...\r\nIhre neue Website wird erstellt.\r\n\r\nDieser Vorgang dauert 2–5 Minuten.')" />
+        <input type="submit"
+          data-de="Website erstellen"
+          data-en="Create website"
+          value="Website erstellen"
+          id="form-submit"
+          onclick="alert(document.getElementById('wrapper').classList.contains('lang-en')
+            ? 'Please wait...\r\nYour new website is being created.\r\n\r\nThis takes 2–5 minutes.'
+            : 'Bitte warten...\r\nIhre neue Website wird erstellt.\r\n\r\nDieser Vorgang dauert 2–5 Minuten.')" />
         <div class="url-note">
-          Keine bestehende Website?
-          <a href="#">Hier klicken und Kurzbeschreibung eingeben.</a>
+          <span data-lang="de">Keine Website? <a href="#">Hier klicken.</a></span>
+          <span data-lang="en">No website? <a href="#">Click here.</a></span>
         </div>
       </div>
 
+      <!-- THE UGLY LANG TOGGLE -->
+      <div class="lang-toggle-wrap">
+        <button id="lang-btn" onclick="toggleLang()">EN/DE</button>
+      </div>
+
       <p>
-        <a class="mehr" href="#faq">Was genau passiert nach der Eingabe? →</a>
+        <a href="#faq">
+          <span data-lang="de">Was passiert nach der Eingabe? →</span>
+          <span data-lang="en">What happens after I enter the URL? →</span>
+        </a>
       </p>
 
-      <!-- Guestbook section -->
-      <div id="gaestebuch" class="guest-section">
-        <h2>Gästebuch – Was unsere Kunden sagen</h2>
+      <!-- Guestbook -->
+      <div id="gaestebuch">
+        <div class="section-head">
+          <span data-lang="de">Gästebuch – Was unsere Kunden sagen</span>
+          <span data-lang="en">Guestbook – What our customers say</span>
+        </div>
 
         <div class="guest-entry">
-          <div class="guest-name">Heinz Müller, Klempnermeister – München</div>
+          <div class="guest-name">Heinz Müller, <span data-lang="de">Klempnermeister</span><span data-lang="en">Master Plumber</span> – München</div>
           <div class="guest-stars">★★★★★</div>
-          <div class="guest-text">Ich hab das kaum geglaubt aber in 5 Minuten hatte ich wirklich eine neue Website. Meine Tochter sagt die sieht jetzt richtig professionell aus. Sehr empfehlenswert!</div>
+          <div class="guest-text">
+            <span data-lang="de">"Ich hab das kaum geglaubt aber in 5 Minuten hatte ich wirklich eine neue Website. Meine Tochter sagt die sieht jetzt richtig professionell aus. Sehr empfehlenswert!"</span>
+            <span data-lang="en">"I could hardly believe it but in 5 minutes I really had a new website. My daughter says it looks really professional now. Highly recommended!"</span>
+          </div>
           <div class="guest-date">12.03.2025</div>
         </div>
 
         <div class="guest-entry">
-          <div class="guest-name">Susanne Wagner, Elektrikerin – Hamburg</div>
+          <div class="guest-name">Susanne Wagner, <span data-lang="de">Elektrikerin</span><span data-lang="en">Electrician</span> – Hamburg</div>
           <div class="guest-stars">★★★★★</div>
-          <div class="guest-text">Endlich rufen mehr Kunden an. Früher war ich bei Google auf Seite 4, jetzt auf Seite 1! Kann ich nur weiterempfehlen.</div>
+          <div class="guest-text">
+            <span data-lang="de">"Endlich rufen mehr Kunden an. Früher war ich bei Google auf Seite 4, jetzt auf Seite 1! Kann ich nur weiterempfehlen."</span>
+            <span data-lang="en">"Finally more customers are calling. I used to be on page 4 on Google, now I'm on page 1! Highly recommend."</span>
+          </div>
           <div class="guest-date">28.02.2025</div>
         </div>
 
         <div class="guest-entry">
-          <div class="guest-name">Karl-Heinz Bauer, Zimmermann – Stuttgart</div>
+          <div class="guest-name">Karl-Heinz Bauer, <span data-lang="de">Zimmermann</span><span data-lang="en">Carpenter</span> – Stuttgart</div>
           <div class="guest-stars">★★★★★</div>
-          <div class="guest-text">Meine alte Seite hab ich 2003 gemacht. Jetzt ist sie modern und ich schäme mich nicht mehr sie Kunden zu zeigen. Sehr guter Service.</div>
+          <div class="guest-text">
+            <span data-lang="de">"Meine alte Seite hab ich 2003 gemacht. Jetzt ist sie modern und ich schäme mich nicht mehr sie Kunden zu zeigen. Sehr guter Service."</span>
+            <span data-lang="en">"I made my old site in 2003. Now it's modern and I'm no longer embarrassed to show it to customers. Very good service."</span>
+          </div>
           <div class="guest-date">15.01.2025</div>
         </div>
       </div>
 
-      <!-- FAQ section -->
-      <div id="faq" class="faq-section">
-        <h2>Häufig gestellte Fragen (FAQ)</h2>
+      <!-- FAQ -->
+      <div id="faq">
+        <div class="section-head">
+          <span data-lang="de">Häufig gestellte Fragen (FAQ)</span>
+          <span data-lang="en">Frequently Asked Questions (FAQ)</span>
+        </div>
 
-        <div class="faq-q">Was kostet die neue Website für meinen Handwerksbetrieb?</div>
-        <div class="faq-a">Werkseite.org ist kostenlos zum Testen. Es gibt keine Einrichtungsgebühr und keine versteckten Kosten. Weit günstiger als eine Webdesign-Agentur.</div>
+        <div class="faq-q"><span data-lang="de">Was kostet die neue Website?</span><span data-lang="en">What does the new website cost?</span></div>
+        <div class="faq-a"><span data-lang="de">Werkseite.org ist kostenlos zum Testen. Keine Einrichtungsgebühr, keine versteckten Kosten.</span><span data-lang="en">Werkseite.org is free to try. No setup fee, no hidden costs.</span></div>
 
-        <div class="faq-q">Wie lange dauert die Erstellung meiner Handwerker-Website?</div>
-        <div class="faq-a">In der Regel ist Ihre neue Website in 2 bis 5 Minuten fertig. Unsere Technologie liest Ihre alte Website automatisch aus und erstellt daraus eine neue Seite.</div>
+        <div class="faq-q"><span data-lang="de">Wie lange dauert die Erstellung?</span><span data-lang="en">How long does creation take?</span></div>
+        <div class="faq-a"><span data-lang="de">In der Regel 2 bis 5 Minuten. Vollautomatisch.</span><span data-lang="en">Usually 2 to 5 minutes. Fully automatic.</span></div>
 
-        <div class="faq-q">Brauche ich technische Kenntnisse?</div>
-        <div class="faq-a">Nein. Sie brauchen nur die Adresse Ihrer alten Website. Alles andere läuft automatisch. Kein Programmieren, kein Gestalten.</div>
+        <div class="faq-q"><span data-lang="de">Brauche ich technische Kenntnisse?</span><span data-lang="en">Do I need technical knowledge?</span></div>
+        <div class="faq-a"><span data-lang="de">Nein. Nur die Adresse Ihrer alten Website genügt.</span><span data-lang="en">No. Just the address of your old website is enough.</span></div>
 
-        <div class="faq-q">Was passiert mit meinen Texten und Bildern?</div>
-        <div class="faq-a">Alle Ihre Texte, Bilder, Telefonnummern und Kontaktdaten werden automatisch übernommen. Nichts geht verloren.</div>
+        <div class="faq-q"><span data-lang="de">Was passiert mit meinen Daten und Bildern?</span><span data-lang="en">What happens to my data and images?</span></div>
+        <div class="faq-a"><span data-lang="de">Alles wird automatisch übernommen. Nichts geht verloren.</span><span data-lang="en">Everything is transferred automatically. Nothing is lost.</span></div>
 
-        <div class="faq-q">Funktioniert die neue Website auch auf dem Handy?</div>
-        <div class="faq-a">Ja. Über 70 % der Kunden suchen heute auf dem Smartphone nach Handwerkern. Alle Websites von Werkseite.org sind für Mobilgeräte optimiert.</div>
+        <div class="faq-q"><span data-lang="de">Funktioniert die Website auf dem Handy?</span><span data-lang="en">Does the website work on mobile?</span></div>
+        <div class="faq-a"><span data-lang="de">Ja. Alle Seiten sind für Mobilgeräte optimiert.</span><span data-lang="en">Yes. All pages are optimised for mobile devices.</span></div>
 
-        <div class="faq-q">Hilft die Website damit ich bei Google gefunden werde?</div>
-        <div class="faq-a">Ja. Unsere Seiten sind von Anfang an für Google optimiert (SEO). Kunden die nach "Klempner in München" suchen finden Sie damit deutlich leichter.</div>
+        <div class="faq-q"><span data-lang="de">Hilft die Website bei Google?</span><span data-lang="en">Does the website help with Google?</span></div>
+        <div class="faq-a"><span data-lang="de">Ja. Alle Seiten sind von Anfang an SEO-optimiert.</span><span data-lang="en">Yes. All pages are SEO-optimised from the start.</span></div>
 
-        <div class="faq-q">Kann ich die Website nach der Erstellung noch anpassen?</div>
-        <div class="faq-a">Ja. Nach der automatischen Erstellung können Sie alle Inhalte jederzeit selbst ändern. Einfach wie ein Textverarbeitungsprogramm.</div>
+        <div class="faq-q"><span data-lang="de">Kann ich danach noch Änderungen machen?</span><span data-lang="en">Can I make changes afterwards?</span></div>
+        <div class="faq-a"><span data-lang="de">Ja. Einfach wie ein Textverarbeitungsprogramm – ohne Programmierkenntnisse.</span><span data-lang="en">Yes. As easy as a word processor – no programming knowledge needed.</span></div>
 
-        <div class="faq-q">Für welche Handwerksbetriebe ist Werkseite.org geeignet?</div>
-        <div class="faq-a">Für alle Handwerksbetriebe: Klempner, Elektriker, Zimmermann, Maler, Dachdecker, Schreiner, Fliesenleger, Maurer und viele mehr.</div>
+        <div class="faq-q"><span data-lang="de">Für welche Handwerker ist das geeignet?</span><span data-lang="en">Which tradespeople is this suitable for?</span></div>
+        <div class="faq-a"><span data-lang="de">Für alle: Klempner, Elektriker, Zimmermann, Maler, Dachdecker, Schreiner und viele mehr.</span><span data-lang="en">For all: plumbers, electricians, carpenters, painters, roofers, joiners and many more.</span></div>
       </div>
 
     </div>
 
     <!-- Right sidebar -->
     <div id="fuer-wen" class="sidebar-right">
-      <div class="right-photo">🔨</div>
+      <div class="right-photo">
+        <img src="classic-assets/professionell.jpg" alt="Professionell">
+      </div>
       <div class="right-photo-caption">
-        Ihre neue Website steht im Fokus unserer Leistungen
+        <span data-lang="de">Ihre neue Website steht im Fokus unserer Leistungen</span>
+        <span data-lang="en">Your new website is at the heart of what we do</span>
       </div>
       <div class="right-info">
-        <strong>Für wen ist das?</strong>
-        Für alle Handwerksbetriebe in Deutschland die eine moderne, professionelle
-        Website ohne großen Aufwand benötigen.
-      </div>
-      <div style="border-top:1px solid #ddd; margin-top:8px"></div>
-      <div class="right-info">
-        <strong>So einfach geht's:</strong>
-        1. URL eingeben<br>
-        2. Warten (5 Min.)<br>
-        3. Fertige Website!
+        <strong><span data-lang="de">Für wen ist das?</span><span data-lang="en">Who is this for?</span></strong>
+        <span data-lang="de">Für alle Handwerksbetriebe in Deutschland die eine moderne Website ohne großen Aufwand benötigen.</span>
+        <span data-lang="en">For all trade businesses in Germany that need a modern website without much effort.</span>
       </div>
       <div style="border-top:1px solid #ddd; margin-top:8px"></div>
       <div class="right-info">
-        <strong>☎ Beratung:</strong>
+        <strong><span data-lang="de">So einfach geht's:</span><span data-lang="en">This easy:</span></strong>
+        <span data-lang="de">1. URL eingeben<br>2. Warten (5 Min.)<br>3. Fertige Website!</span>
+        <span data-lang="en">1. Enter URL<br>2. Wait (5 min.)<br>3. Done!</span>
+      </div>
+      <div style="border-top:1px solid #ddd; margin-top:8px"></div>
+      <div class="right-info">
+        <strong>☎ <span data-lang="de">Beratung:</span><span data-lang="en">Enquiries:</span></strong>
         089 / 123 45 67<br>
-        Mo–Fr 8–18 Uhr
+        <span data-lang="de">Mo–Fr 8–18 Uhr</span>
+        <span data-lang="en">Mon–Fri 8am–6pm</span>
       </div>
     </div>
 
-  </div><!-- end .main-layout -->
+  </div><!-- end main-layout -->
 
-  <!-- ── Footer ─────────────────────────────────────────────────────── -->
+  <!-- ── Footer ───────────────────────────────────────────────────── -->
   <div class="footer">
-    <a href="#">Startseite</a>
-    <a href="#">Impressum</a>
-    <a href="#">Datenschutzerklärung</a>
-    <a href="#">Kontakt</a>
+    <a href="#"><span data-lang="de">Startseite</span><span data-lang="en">Home</span></a>
+    <a href="#"><span data-lang="de">Impressum</span><span data-lang="en">Legal notice</span></a>
+    <a href="#"><span data-lang="de">Datenschutzerklärung</span><span data-lang="en">Privacy policy</span></a>
+    <a href="#"><span data-lang="de">Kontakt</span><span data-lang="en">Contact</span></a>
     <br>
     <span style="font-size:11px; color:#888; margin-top:4px; display:block">
-      © 2003–2025 Werkseite.org · Webdesign: Markus Klein EDV-Lösungen · Hosting: Strato AG
+      © 2003–2025 Werkseite.org ·
+      <span data-lang="de">Webdesign: Markus Klein EDV-Lösungen · Hosting: Strato AG</span>
+      <span data-lang="en">Web design: Markus Klein IT Solutions · Hosting: Strato AG</span>
     </span>
   </div>
 
-</div><!-- end .wrapper -->
+</div><!-- end wrapper -->
+
+<script>
+  function toggleLang() {
+    var w = document.getElementById('wrapper');
+    var btn = document.getElementById('lang-btn');
+    var submit = document.getElementById('form-submit');
+    if (w.classList.contains('lang-de')) {
+      w.classList.replace('lang-de', 'lang-en');
+      btn.textContent = 'DE/EN';
+      submit.value = submit.dataset.en;
+    } else {
+      w.classList.replace('lang-en', 'lang-de');
+      btn.textContent = 'EN/DE';
+      submit.value = submit.dataset.de;
+    }
+  }
+</script>
 
 </body>
 </html>
