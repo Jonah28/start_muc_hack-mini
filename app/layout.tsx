@@ -30,8 +30,9 @@ export default function RootLayout({
       lang="de"
       data-scroll-behavior="smooth"
       className={`${bricolage.variable} ${dmSans.variable} h-full`}
+      suppressHydrationWarning
     >
-      <body className="min-h-dvh flex flex-col">{children}</body>
+      <body className="min-h-dvh flex flex-col" suppressHydrationWarning>{children}</body>
     </html>
   );
 }
