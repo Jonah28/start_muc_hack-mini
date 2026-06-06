@@ -41,17 +41,19 @@ export function TrustedBy({ lang = "de" }: { lang?: Lang }) {
         </motion.p>
       </div>
 
-      {/* Marquee — left/right edges fade via mask-image */}
+      {/* Marquee — CSS keyframe animation is gapless; framer-motion repeat snaps */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes marquee-scroll {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+      ` }} />
       <div className="[mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
-        <motion.div
+        <div
           className="flex items-center gap-12 md:gap-16"
-          style={{ width: "max-content" }}
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{
-            duration: 28,
-            repeat: Infinity,
-            ease: "linear",
-            repeatType: "loop",
+          style={{
+            width: "max-content",
+            animation: "marquee-scroll 28s linear infinite",
           }}
         >
           {doubled.map((logo, i) => (
@@ -78,7 +80,7 @@ export function TrustedBy({ lang = "de" }: { lang?: Lang }) {
               />
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
