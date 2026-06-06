@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Check, Lock, Sparkles } from "lucide-react";
 import type { BusinessProfile, DesignChoices, HeroLayoutId, SiteConfig } from "@/lib/types";
 import { FONTS, HERO_LAYOUTS, PALETTES, SECTIONS, TEMPLATES, choicesFromTemplate, type TemplateDef } from "./data";
+import { GameOverlay } from "@/components/ui/game-overlay";
 
 const STEP_NAMES = ["Farben", "Typografie", "Hero", "Bereiche", "Prüfen"];
 const REQUIRED_SECTIONS = ["hero", "services", "contact"];
@@ -20,6 +21,7 @@ export function DesignWizard({ initialUrl }: { initialUrl: string }) {
   const [error, setError] = useState(initialUrl ? "" : "Keine Website-Adresse übergeben.");
   const [loading, setLoading] = useState(Boolean(initialUrl));
   const [publishing, setPublishing] = useState(false);
+  const [showGame, setShowGame] = useState(false);
 
   useEffect(() => {
     if (!initialUrl) return;
@@ -72,6 +74,7 @@ export function DesignWizard({ initialUrl }: { initialUrl: string }) {
   async function publish() {
     if (!profile) return;
     setPublishing(true);
+    setShowGame(true);
     setError("");
     try {
       const response = await fetch("/api/sites", {
@@ -85,6 +88,7 @@ export function DesignWizard({ initialUrl }: { initialUrl: string }) {
       setPublishedUrl(body.url);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Veröffentlichung fehlgeschlagen.");
+      setShowGame(false);
     } finally {
       setPublishing(false);
     }
@@ -115,6 +119,17 @@ export function DesignWizard({ initialUrl }: { initialUrl: string }) {
 
       <div className="wizard-split-layout">
         <main className="wizard-main">
+        {showGame && (
+          <GameOverlay
+            url={publishedUrl || profile.name}
+            isPublishing={publishing}
+            buildSeconds={15}
+            onComplete={() => {
+              setShowGame(false);
+              if (publishedUrl) window.open(publishedUrl, "_blank");
+            }}
+          />
+        )}
         <AnimatePresence mode="wait" initial={false} custom={direction}>
           <motion.section
             key={step}

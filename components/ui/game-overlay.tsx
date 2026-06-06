@@ -14,16 +14,6 @@ interface WinCell { row: number; col: number; health: Health; }
 const ROWS          = 4;
 const COLS          = 5;
 const RALPH_MS      = 1000;  // ralph moves every 1000 ms
-const GAME_SECONDS  = 120;   // game timer
-const BUILD_SECONDS = 55;    // fake build duration
-
-const BUILD_STEPS = [
-  { label: "Alte Website wird geladen…",        at: 0  },
-  { label: "Inhalte werden analysiert…",        at: 12 },
-  { label: "Design wird generiert…",            at: 28 },
-  { label: "Letzte Details werden verfeinert…", at: 42 },
-  { label: "Neue Website ist fertig!",          at: 54 },
-];
 
 /* ── Sprite paths ──────────────────────────────────────────────────────── */
 const G = {
@@ -70,10 +60,12 @@ function felixImg(anim: FelixAnim) {
 /* ── Component ─────────────────────────────────────────────────────────── */
 interface Props {
   url: string;
+  isPublishing?: boolean;
+  buildSeconds?: number;
   onComplete: () => void;
 }
 
-export function GameOverlay({ url, onComplete }: Props) {
+export function GameOverlay({ url, isPublishing = false, buildSeconds = 15, onComplete }: Props) {
   /* -- Game state -- */
   const [windows,      setWindows]      = useState<WinCell[]>(initWindows);
   const [ralphCol,     setRalphCol]     = useState(2);
@@ -81,13 +73,21 @@ export function GameOverlay({ url, onComplete }: Props) {
   const [felixRow,     setFelixRow]     = useState(0);
   const [felixCol,     setFelixCol]     = useState(0);
   const [felixAnim,    setFelixAnim]    = useState<FelixAnim>("idle");
-  const [gameTime,     setGameTime]     = useState(GAME_SECONDS);
   const [gamePhase,    setGamePhase]    = useState<GamePhase>("playing");
 
   /* -- Build progress -- */
   const [buildElapsed, setBuildElapsed] = useState(0);
-  const buildDone = buildElapsed >= BUILD_SECONDS;
-  const buildPct  = Math.min(100, Math.round((buildElapsed / BUILD_SECONDS) * 100));
+  const buildDone = buildElapsed >= buildSeconds && !isPublishing;
+  const buildPct  = Math.min(isPublishing ? 99 : 100, Math.round((buildElapsed / buildSeconds) * 100));
+  
+  const BUILD_STEPS = [
+    { label: "Design wird angewendet…",             at: 0 },
+    { label: "Seitenstruktur wird aufgebaut…",      at: Math.floor(buildSeconds * 0.25) },
+    { label: "Bilder werden platziert…",            at: Math.floor(buildSeconds * 0.5) },
+    { label: "Letzte Details werden verfeinert…",   at: Math.floor(buildSeconds * 0.75) },
+    { label: "Neue Website ist fast fertig!",       at: buildSeconds - 1 },
+  ];
+  
   const stepLabel = [...BUILD_STEPS].reverse().find(s => buildElapsed >= s.at)?.label ?? BUILD_STEPS[0].label;
 
   /* -- Refs to avoid stale closures in intervals/listeners -- */
@@ -105,22 +105,13 @@ export function GameOverlay({ url, onComplete }: Props) {
   useEffect(() => {
     if (buildDone) return;
     const id = setInterval(() => {
-      setBuildElapsed(p => Math.min(BUILD_SECONDS, p + 1));
-    }, 1000);
-    return () => clearInterval(id);
-  }, [buildDone]);
-
-  /* -- Game countdown -- */
-  useEffect(() => {
-    if (gamePhase !== "playing") return;
-    const id = setInterval(() => {
-      setGameTime(p => {
-        if (p <= 1) { setGamePhase("won"); return 0; }
-        return p - 1;
+      setBuildElapsed(p => {
+        if (p >= buildSeconds && isPublishing) return p;
+        return Math.min(buildSeconds, p + 1);
       });
     }, 1000);
     return () => clearInterval(id);
-  }, [gamePhase]);
+  }, [buildDone, buildSeconds, isPublishing]);
 
   /* -- Lose condition -- */
   useEffect(() => {
@@ -200,14 +191,12 @@ export function GameOverlay({ url, onComplete }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [moveFelix, doFix]);
 
-  /* -- Restart -- */
   const restart = useCallback(() => {
     setWindows(initWindows());
     setRalphCol(2);
     setFelixRow(0); felixRowRef.current = 0;
     setFelixCol(0); felixColRef.current = 0;
     setFelixAnim("idle");
-    setGameTime(GAME_SECONDS);
     setGamePhase("playing");
   }, []);
 
@@ -253,7 +242,6 @@ export function GameOverlay({ url, onComplete }: Props) {
         {/* Stats */}
         <div className="absolute top-2 left-3 z-20 text-white text-xs font-bold drop-shadow-lg leading-5">
           <div>Punkte: {Math.max(0, points)}</div>
-          <div>Zeit:&nbsp;&nbsp;{gameTime}s</div>
         </div>
 
         <div style={{ maxWidth: 400, margin: "0 auto" }}>
