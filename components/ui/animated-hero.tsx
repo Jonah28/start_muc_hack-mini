@@ -160,7 +160,7 @@ export function AnimatedHero({ lang }: HeroProps) {
   }
 
   const fadeUp = (delay: number) => ({
-    initial: { opacity: 0, y: 20 },
+    initial: false as const,
     animate: { opacity: 1, y: 0 },
     transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] as const },
   });
@@ -189,7 +189,7 @@ export function AnimatedHero({ lang }: HeroProps) {
               key={`${lang}-${greetingIdx}`}
               className="block font-extrabold text-5xl md:text-[3.75rem] leading-none tracking-tight text-brand-green"
               style={{ fontFamily: "var(--font-display)" }}
-              initial={{ y: 64, opacity: 0, filter: "blur(6px)" }}
+              initial={false}
               animate={{ y: 0,  opacity: 1, filter: "blur(0px)" }}
               exit={{   y: -64, opacity: 0, filter: "blur(6px)" }}
               transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
