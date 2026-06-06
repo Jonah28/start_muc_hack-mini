@@ -34,10 +34,10 @@ export const LandingAccordion = ({ site }: { site: SiteConfig }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   
   const accordionItems = [
-    { id: 1, title: site.profile.services[0] || 'Dienstleistung 1', imageUrl: site.profile.imageUrls[0] || '/hack-images/craftsman_at_work_bathroom.png' },
-    { id: 2, title: site.profile.services[1] || 'Dienstleistung 2', imageUrl: site.profile.imageUrls[1] || '/hack-images/overtheshoulder_tiling_woman.png' },
-    { id: 3, title: site.profile.services[2] || 'Dienstleistung 3', imageUrl: site.profile.imageUrls[2] || '/hack-images/two_craftsmen_at_work_kitchen.png' },
-    { id: 4, title: site.profile.services[3] || 'Dienstleistung 4', imageUrl: site.profile.imageUrls[3] || '/hack-images/family_with_craftsman_projectplaning.png' },
+    { id: 1, title: site.profile.services[0] || 'Dienstleistung 1', imageUrl: '/hack-images/craftsman_at_work_bathroom.png' },
+    { id: 2, title: site.profile.services[1] || 'Dienstleistung 2', imageUrl: '/hack-images/overtheshoulder_tiling_woman.png' },
+    { id: 3, title: site.profile.services[2] || 'Dienstleistung 3', imageUrl: '/hack-images/two_craftsmen_at_work_kitchen.png' },
+    { id: 4, title: site.profile.services[3] || 'Dienstleistung 4', imageUrl: '/hack-images/family_with_craftsman_projectplaning.png' },
   ];
 
   return (
