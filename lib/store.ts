@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { createFallbackSiteContent } from "@/lib/site-content";
 import type { Database, DesignChoices, Inquiry, SiteConfig } from "@/lib/types";
 
 const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), "data");
@@ -23,7 +24,6 @@ async function readDatabase(): Promise<Database> {
 }
 
 function normalizeSite(site: SiteConfig & { template?: string; color?: string; sections?: string[] }) {
-  if (site.design) return site;
   const legacyPalettes: Record<string, DesignChoices["palette"]> = {
     blau: { name: "Trusted Blue", colors: ["#123046", "#195f92", "#e9f3fa", "#475569"] },
     gruen: { name: "Fresh Green", colors: ["#173a2b", "#2d6a4f", "#e7f2ec", "#475569"] },
@@ -32,13 +32,16 @@ function normalizeSite(site: SiteConfig & { template?: string; color?: string; s
   };
   return {
     ...site,
-    design: {
-      template: { id: "classic-trades", name: "Classic Trades" },
-      palette: legacyPalettes[site.color || "blau"] || legacyPalettes.blau,
-      font: { name: "Modern Sans", heading: "'Poppins', sans-serif", body: "'Inter', sans-serif" },
-      heroLayout: "split" as const,
-      sections: ["hero", ...(site.sections || ["services", "about", "contact"])],
-    },
+    design:
+      site.design ||
+      {
+        template: { id: "classic-trades", name: "Classic Trades" },
+        palette: legacyPalettes[site.color || "blau"] || legacyPalettes.blau,
+        font: { name: "Modern Sans", heading: "'Poppins', sans-serif", body: "'Inter', sans-serif" },
+        heroLayout: "split" as const,
+        sections: ["hero", ...(site.sections || ["services", "about", "contact"])],
+      },
+    content: site.content || createFallbackSiteContent(site.profile),
   };
 }
 

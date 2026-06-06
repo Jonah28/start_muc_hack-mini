@@ -16,9 +16,16 @@ async function resolveSite(params: Params) {
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { site, page } = await resolveSite(params);
-  const pageName = page ? ` · ${page.replace("-", " ")}` : "";
-  const title = `${site.profile.name}${pageName}`;
-  const description = `${site.profile.trade} in ${site.profile.serviceArea}: ${site.profile.description}`.slice(0, 160);
+  const pageMeta = {
+    leistungen: { title: site.content.services.title, description: site.content.services.intro },
+    "ueber-uns": { title: site.content.about.title, description: site.content.about.intro },
+    kontakt: { title: site.content.contact.title, description: site.content.contact.intro },
+  }[page || ""];
+  const title = pageMeta ? `${pageMeta.title} · ${site.profile.name}` : site.profile.name;
+  const description = (
+    pageMeta?.description ||
+    `${site.profile.trade} in ${site.profile.serviceArea}: ${site.profile.description}`
+  ).slice(0, 160);
   const canonical = `${siteOrigin(site.slug)}${page ? `/${page}` : ""}`;
   return {
     title,

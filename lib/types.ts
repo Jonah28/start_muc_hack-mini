@@ -35,11 +35,63 @@ export interface BusinessProfile {
   sourceUrl: string;
 }
 
+export interface SiteImageAsset {
+  id: string;
+  alt: string;
+  prompt: string;
+  url?: string;
+}
+
+export interface SitePageImages {
+  hero: SiteImageAsset;
+  feature: SiteImageAsset;
+}
+
+export interface ServiceContent {
+  name: string;
+  description: string;
+}
+
+export interface ValueContent {
+  title: string;
+  description: string;
+}
+
+export interface SiteContent {
+  services: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    services: ServiceContent[];
+    processTitle: string;
+    processIntro: string;
+    processSteps: string[];
+    images: SitePageImages;
+  };
+  about: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    paragraphs: string[];
+    values: ValueContent[];
+    images: SitePageImages;
+  };
+  contact: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    callbackText: string;
+    areaText: string;
+    images: SitePageImages;
+  };
+}
+
 export interface SiteConfig {
   id: string;
   slug: string;
   profile: BusinessProfile;
   design: DesignChoices;
+  content: SiteContent;
   pages: PageId[];
   indexable: boolean;
   createdAt: string;

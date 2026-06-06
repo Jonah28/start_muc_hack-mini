@@ -2,7 +2,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
 import { HEY_TELO_PHONE_NUMBER, siteOrigin } from "@/lib/config";
-import type { PageId, SiteConfig } from "@/lib/types";
+import type { PageId, SiteConfig, SiteImageAsset } from "@/lib/types";
 import { isWeekend } from "@/lib/utils";
 import { InquiryForm } from "@/components/InquiryForm";
 
@@ -26,8 +26,8 @@ function Services({ site }: { site: SiteConfig }) {
       <p className="customer-eyebrow">Was wir für Sie tun</p>
       <h2>Unsere Leistungen</h2>
       <div className="service-grid">
-        {site.profile.services.map((service, index) => (
-          <article key={service}><span>0{index + 1}</span><h3>{service}</h3><p>Persönliche Beratung und fachgerechte Ausführung aus einer Hand.</p></article>
+        {site.content.services.services.map((service, index) => (
+          <article key={service.name}><span>0{index + 1}</span><h3>{service.name}</h3><p>{service.description}</p></article>
         ))}
       </div>
     </section>
@@ -38,7 +38,7 @@ function About({ site }: { site: SiteConfig }) {
   return (
     <section className="customer-section split-section" id="ueber-uns">
       <div><p className="customer-eyebrow">Ihr Fachbetrieb</p><h2>Über {site.profile.name}</h2></div>
-      <p>{site.profile.description}</p>
+      <p>{site.content.about.intro}</p>
     </section>
   );
 }
@@ -99,6 +99,102 @@ function Contact({ site }: { site: SiteConfig }) {
   );
 }
 
+function SiteImage({ asset, label }: { asset: SiteImageAsset; label: string }) {
+  return asset.url ? (
+    <img className="generated-site-image" src={asset.url} alt={asset.alt} />
+  ) : (
+    <div className="generated-image-placeholder" role="img" aria-label={asset.alt}>
+      <span>{label}</span>
+      <strong>{asset.alt}</strong>
+      <small>KI-Bild-Slot</small>
+    </div>
+  );
+}
+
+function PageHero({
+  site,
+  eyebrow,
+  title,
+  intro,
+  image,
+}: {
+  site: SiteConfig;
+  eyebrow: string;
+  title: string;
+  intro: string;
+  image: SiteImageAsset;
+}) {
+  return (
+    <section className="subpage-hero">
+      <div>
+        <p className="customer-eyebrow">{eyebrow}</p>
+        <h1>{title}</h1>
+        <p>{intro}</p>
+        <div className="hero-actions"><CallButton /><Link href={`${siteOrigin(site.slug)}/kontakt`}>Anfrage senden</Link></div>
+      </div>
+      <SiteImage asset={image} label="Geplantes Titelbild" />
+    </section>
+  );
+}
+
+function ServicesPage({ site }: { site: SiteConfig }) {
+  const content = site.content.services;
+  return (
+    <>
+      <PageHero site={site} eyebrow={content.eyebrow} title={content.title} intro={content.intro} image={content.images.hero} />
+      <Services site={site} />
+      <section className="customer-section process-section">
+        <SiteImage asset={content.images.feature} label="Geplantes Prozessbild" />
+        <div>
+          <p className="customer-eyebrow">Von der Anfrage bis zum Ergebnis</p>
+          <h2>{content.processTitle}</h2>
+          <p>{content.processIntro}</p>
+          <ol>{content.processSteps.map((step, index) => <li key={step}><span>{index + 1}</span>{step}</li>)}</ol>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function AboutPage({ site }: { site: SiteConfig }) {
+  const content = site.content.about;
+  return (
+    <>
+      <PageHero site={site} eyebrow={content.eyebrow} title={content.title} intro={content.intro} image={content.images.hero} />
+      <section className="customer-section story-section">
+        <div><p className="customer-eyebrow">Über {site.profile.name}</p><h2>Persönlich. Verlässlich. Vor Ort.</h2>{content.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div>
+        <SiteImage asset={content.images.feature} label="Geplanter Einblick in den Betrieb" />
+      </section>
+      <section className="customer-section values-section">
+        <p className="customer-eyebrow">Was uns wichtig ist</p><h2>Darauf können Sie bauen</h2>
+        <div>{content.values.map((value) => <article key={value.title}><h3>{value.title}</h3><p>{value.description}</p></article>)}</div>
+      </section>
+    </>
+  );
+}
+
+function ContactPage({ site }: { site: SiteConfig }) {
+  const content = site.content.contact;
+  return (
+    <>
+      <PageHero site={site} eyebrow={content.eyebrow} title={content.title} intro={content.intro} image={content.images.hero} />
+      <section className="customer-section contact-page-section">
+        <div className="contact-details">
+          <p className="customer-eyebrow">Wir melden uns zurück</p><h2>Ihr direkter Kontakt</h2><p>{content.callbackText}</p>
+          <a href={`tel:${HEY_TELO_PHONE_NUMBER}`}><strong>{site.profile.phone}</strong><span>Jetzt über Hey Telo anrufen</span></a>
+          <a href={`mailto:${site.profile.email}`}><strong>{site.profile.email}</strong><span>E-Mail senden</span></a>
+          <p>{site.profile.address}</p>
+        </div>
+        <InquiryForm siteId={site.id} />
+      </section>
+      <section className="customer-section contact-area-section">
+        <SiteImage asset={content.images.feature} label="Geplantes Bild aus dem Einsatzgebiet" />
+        <div><p className="customer-eyebrow">Einsatzgebiet</p><h2>{site.profile.serviceArea}</h2><p>{content.areaText}</p></div>
+      </section>
+    </>
+  );
+}
+
 function Hero({ site }: { site: SiteConfig }) {
   const image = site.profile.imageUrls.find((url) => !/\.svg(?:\?|$)/i.test(url));
   return (
@@ -145,9 +241,9 @@ export function SiteTemplate({ site, page }: { site: SiteConfig; page?: string }
   };
 
   let pageContent: ReactNode = null;
-  if (page === "leistungen") pageContent = <Services site={site} />;
-  if (page === "ueber-uns") pageContent = <About site={site} />;
-  if (page === "kontakt") pageContent = <Contact site={site} />;
+  if (page === "leistungen") pageContent = <ServicesPage site={site} />;
+  if (page === "ueber-uns") pageContent = <AboutPage site={site} />;
+  if (page === "kontakt") pageContent = <ContactPage site={site} />;
 
   return (
     <div className={`customer-site customer-template-${site.design.template.id}`} style={style}>
