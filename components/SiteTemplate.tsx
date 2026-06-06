@@ -255,14 +255,6 @@ export function SiteTemplate({ site, page }: { site: SiteConfig; page?: string }
   return (
     <div className={`customer-site customer-template-${site.design.template.id}`} style={style}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      {site.design.sections.includes("emergency") && <div className="emergency-banner">24/7 Notdienst: Rufen Sie jetzt an · <a href={`tel:${HEY_TELO_PHONE_NUMBER}`}>{HEY_TELO_PHONE_NUMBER}</a></div>}
-      {isWeekend() && <div className="weekend-banner">Auch am Wochenende erreichbar: Hey Telo nimmt Ihren Anruf entgegen.</div>}
-      <div className="customer-topbar">
-        <span>✓ Regional vor Ort · ✓ Zuverlässig & Kompetent</span>
-        <div className="topbar-contact">
-          <a href={`mailto:${site.profile.email}`}>✉ {site.profile.email}</a>
-        </div>
-      </div>
       <header className="customer-header">
         <Link className="customer-logo" href={origin}>{site.profile.name}</Link>
         <nav><Link href={origin}>Start</Link>{site.pages.map((item) => <Link key={item} href={`${origin}/${item}`}>{pageLabels[item]}</Link>)}</nav>
