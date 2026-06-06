@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { AnimatedHero } from "@/components/ui/animated-hero";
+import { TrustedBy } from "@/components/ui/trusted-by";
 import { HowItWorks } from "@/components/ui/how-it-works";
 import { TestimonialsSection } from "@/components/ui/testimonials-section";
 import { AboutSection } from "@/components/ui/about-section";
@@ -71,6 +72,7 @@ export default function Home() {
       {/* ── Sections ────────────────────────────────────────────── */}
       <main className="flex-1">
         <AnimatedHero lang={lang} onLangChange={setLang} />
+        <TrustedBy lang={lang} />
         <HowItWorks lang={lang} />
         <TestimonialsSection lang={lang} />
         <AboutSection lang={lang} />
