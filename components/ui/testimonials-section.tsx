@@ -1,8 +1,12 @@
 "use client";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { TestimonialsColumn } from "@/components/ui/testimonials-columns-1";
 
 type Lang = "de" | "en";
+
+const CITIES_DE = ["Bayern", "Berlin", "Hamburg", "Leipzig", "Stuttgart", "Köln", "Dresden", "Frankfurt"];
+const CITIES_EN = ["Bavaria", "Berlin", "Hamburg", "Leipzig", "Stuttgart", "Cologne", "Dresden", "Frankfurt"];
 
 const testimonials = [
   {
@@ -68,18 +72,23 @@ const thirdColumn  = testimonials.slice(6, 9);
 const copy = {
   de: {
     badge: "Kundenstimmen",
-    headline: "Handwerker in ganz Bayern vertrauen uns.",
     sub: "Von der alten zur neuen Website – in Minuten. Das sagen Betriebe, die bereits dabei sind.",
   },
   en: {
     badge: "Testimonials",
-    headline: "Tradespeople across Bavaria trust us.",
     sub: "From old website to new — in minutes. Here's what businesses already using it say.",
   },
 };
 
 export function TestimonialsSection({ lang = "de" }: { lang?: Lang }) {
   const t = copy[lang];
+  const cities = lang === "de" ? CITIES_DE : CITIES_EN;
+  const [cityIdx, setCityIdx] = useState(0);
+
+  useEffect(() => {
+    const id = setTimeout(() => setCityIdx((i) => (i + 1) % cities.length), 2000);
+    return () => clearTimeout(id);
+  }, [cityIdx, cities.length]);
 
   return (
     <section className="py-24 relative overflow-hidden" style={{ background: "var(--color-surface)" }}>
@@ -97,10 +106,48 @@ export function TestimonialsSection({ lang = "de" }: { lang?: Lang }) {
             {t.badge}
           </span>
           <h2
-            className="text-3xl md:text-[2.5rem] font-extrabold tracking-tight text-ink leading-[1.15] mb-4"
+            className="text-3xl md:text-[2.5rem] font-extrabold tracking-tight text-ink leading-[1.2] mb-4"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            {t.headline}
+            {lang === "de" ? (
+              <>
+                Handwerker in ganz{" "}
+                <span className="relative inline-flex overflow-hidden align-bottom" style={{ minWidth: "5.5ch" }}>
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={cityIdx}
+                      className="text-brand-green"
+                      initial={{ y: 32, opacity: 0, filter: "blur(6px)" }}
+                      animate={{ y: 0,  opacity: 1, filter: "blur(0px)" }}
+                      exit={{   y: -32, opacity: 0, filter: "blur(6px)" }}
+                      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      {cities[cityIdx]}
+                    </motion.span>
+                  </AnimatePresence>
+                </span>{" "}
+                vertrauen uns.
+              </>
+            ) : (
+              <>
+                Tradespeople across{" "}
+                <span className="relative inline-flex overflow-hidden align-bottom" style={{ minWidth: "5.5ch" }}>
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={cityIdx}
+                      className="text-brand-green"
+                      initial={{ y: 32, opacity: 0, filter: "blur(6px)" }}
+                      animate={{ y: 0,  opacity: 1, filter: "blur(0px)" }}
+                      exit={{   y: -32, opacity: 0, filter: "blur(6px)" }}
+                      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      {cities[cityIdx]}
+                    </motion.span>
+                  </AnimatePresence>
+                </span>{" "}
+                trust us.
+              </>
+            )}
           </h2>
           <p className="text-base text-ink-mid leading-relaxed">
             {t.sub}
