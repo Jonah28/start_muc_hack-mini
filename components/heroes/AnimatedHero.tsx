@@ -1,11 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { HEY_TELO_PHONE_NUMBER } from "@/lib/config";
 import type { SiteConfig } from "@/lib/types";
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -13,7 +13,7 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { y: 20, opacity: 0 },
   visible: {
     y: 0,

@@ -41,14 +41,11 @@ export const ShaderShowcase = ({ site }: { site: SiteConfig }) => {
         className="absolute inset-0 w-full h-full"
         colors={["#000000", "#195f92", "#0891b2", "#164e63", "#3b82f6"]}
         speed={0.3}
-        backgroundColor="#000000"
       />
       <MeshGradient
         className="absolute inset-0 w-full h-full opacity-60"
         colors={["#000000", "#ffffff", "#195f92", "#3b82f6"]}
         speed={0.2}
-        wireframe="true"
-        backgroundColor="transparent"
       />
       <main className="absolute bottom-16 left-8 md:left-16 z-20 max-w-3xl">
         <div className="text-left">
@@ -129,14 +126,6 @@ export const ShaderShowcase = ({ site }: { site: SiteConfig }) => {
             thickness={0.1}
             softness={0.2}
             intensity={5}
-            spotsPerColor={3}
-            spotSize={0.1}
-            pulse={0.1}
-            smoke={0.5}
-            smokeSize={4}
-            scale={0.65}
-            rotation={0}
-            frame={9161408}
             style={{ width: "120px", height: "120px", borderRadius: "50%" }}
           />
           <motion.svg

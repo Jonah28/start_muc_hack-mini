@@ -94,8 +94,10 @@ function FloatingEmoji({
   );
 }
 
+import { MotionValue } from "framer-motion";
+
 /* ── Scroll indicator ──────────────────────────────────────────────────── */
-function ScrollDots({ opacity }: { opacity: ReturnType<typeof useTransform> }) {
+function ScrollDots({ opacity }: { opacity: MotionValue<number> }) {
   return (
     <motion.div
       className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none select-none"
