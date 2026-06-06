@@ -7,6 +7,7 @@ import { AnimatedHero } from "@/components/ui/animated-hero";
 import { TrustedBy } from "@/components/ui/trusted-by";
 import { HowItWorks } from "@/components/ui/how-it-works";
 import { TestimonialsSection } from "@/components/ui/testimonials-section";
+import { FAQSection } from "@/components/ui/faq-section";
 import { AboutSection } from "@/components/ui/about-section";
 
 type Lang = "de" | "en";
@@ -75,6 +76,7 @@ export default function Home() {
         <TrustedBy lang={lang} />
         <HowItWorks lang={lang} />
         <TestimonialsSection lang={lang} />
+        <FAQSection lang={lang} />
         <AboutSection lang={lang} />
       </main>
 
