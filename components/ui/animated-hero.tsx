@@ -42,35 +42,49 @@ const copy = {
 
 /* ── Floating emoji layer ──────────────────────────────────────────────── */
 const TRADE_EMOJIS = [
-  { emoji: "🔨", x: "8%",  baseY: "22%", speed: 0.7, entryDelay: 0.10, size: 28 },
-  { emoji: "🔧", x: "88%", baseY: "15%", speed: 0.5, entryDelay: 0.05, size: 24 },
-  { emoji: "⛑️", x: "76%", baseY: "55%", speed: 0.9, entryDelay: 0.18, size: 30 },
-  { emoji: "🧱", x: "14%", baseY: "65%", speed: 0.6, entryDelay: 0.22, size: 26 },
-  { emoji: "🪚", x: "91%", baseY: "78%", speed: 0.8, entryDelay: 0.14, size: 22 },
-  { emoji: "🔩", x: "4%",  baseY: "48%", speed: 0.55,entryDelay: 0.28, size: 20 },
-  { emoji: "🏗️", x: "50%", baseY: "5%",  speed: 0.4, entryDelay: 0.08, size: 32 },
-  { emoji: "🪛", x: "60%", baseY: "90%", speed: 0.65,entryDelay: 0.20, size: 22 },
+  { emoji: "🔨", label: "Zimmermann",  x: "3%",  baseY: "18%", speed: 0.55, mountDelay: 0.10, rotate0: -18, rotate1: 12 },
+  { emoji: "🔧", label: "Klempner",    x: "85%", baseY: "10%", speed: 0.40, mountDelay: 0.05, rotate0:  10, rotate1: -8 },
+  { emoji: "⛑️", label: "Bauleiter",   x: "80%", baseY: "52%", speed: 0.70, mountDelay: 0.20, rotate0: -10, rotate1: 14 },
+  { emoji: "🧱", label: "Maurer",      x: "5%",  baseY: "62%", speed: 0.50, mountDelay: 0.25, rotate0:   8, rotate1: -12 },
+  { emoji: "🪚", label: "Schreiner",   x: "88%", baseY: "75%", speed: 0.65, mountDelay: 0.15, rotate0: -14, rotate1: 10 },
+  { emoji: "🏗️", label: "Baustelle",   x: "44%", baseY: "2%",  speed: 0.35, mountDelay: 0.08, rotate0:   6, rotate1: -10 },
+  { emoji: "🔩", label: "Metallbauer", x: "1%",  baseY: "40%", speed: 0.45, mountDelay: 0.30, rotate0: -20, rotate1: 16 },
+  { emoji: "🪛", label: "Elektriker",  x: "67%", baseY: "88%", speed: 0.60, mountDelay: 0.18, rotate0:  12, rotate1: -14 },
 ];
 
 function FloatingEmoji({
-  emoji, x, baseY, speed, entryDelay, size, scrollYProgress,
+  emoji, label, x, baseY, speed, mountDelay, rotate0, rotate1, scrollYProgress,
 }: {
-  emoji: string; x: string; baseY: string; speed: number;
-  entryDelay: number; size: number;
+  emoji: string; label: string; x: string; baseY: string; speed: number;
+  mountDelay: number; rotate0: number; rotate1: number;
   scrollYProgress: ReturnType<typeof useScroll>["scrollYProgress"];
 }) {
-  const opacity  = useTransform(scrollYProgress, [0, 0.08 + entryDelay * 0.3, 0.85], [0, 0.85, 0]);
-  const yOffset  = useTransform(scrollYProgress, [0, 1], [60, -80 * speed]);
-  const rotate   = useTransform(scrollYProgress, [0, 1], [-15, 25 * speed]);
-  const scale    = useTransform(scrollYProgress, [0, 0.1 + entryDelay * 0.2, 0.9], [0.4, 1, 0.7]);
+  const opacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
+  const yOffset = useTransform(scrollYProgress, [0, 1], [0, -140 * speed]);
+  const rotate  = useTransform(scrollYProgress, [0, 1], [rotate0, rotate1]);
+  const scale   = useTransform(scrollYProgress, [0, 0.8], [1, 0.82]);
 
   return (
     <motion.div
-      className="absolute pointer-events-none select-none hidden md:block"
-      style={{ left: x, top: baseY, opacity, y: yOffset, rotate, scale, fontSize: size }}
+      className="absolute pointer-events-none select-none hidden lg:flex flex-col items-center gap-1.5"
+      style={{ left: x, top: baseY, opacity, y: yOffset, rotate, scale }}
+      initial={{ opacity: 0, y: 24, scale: 0.7 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.6, delay: mountDelay, ease: [0.22, 1, 0.36, 1] }}
       aria-hidden
     >
-      {emoji}
+      <div
+        className="flex items-center justify-center rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.10)] border border-white/80 bg-white/70 backdrop-blur-sm"
+        style={{ width: 72, height: 72, fontSize: 38 }}
+      >
+        {emoji}
+      </div>
+      <span
+        className="text-[10px] font-bold tracking-widest uppercase text-ink-mid/70 bg-white/60 backdrop-blur-sm rounded-full px-2.5 py-0.5 border border-white/60"
+        style={{ fontFamily: "var(--font-display)", letterSpacing: "0.12em" }}
+      >
+        {label}
+      </span>
     </motion.div>
   );
 }
