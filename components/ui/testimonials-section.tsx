@@ -111,39 +111,45 @@ export function TestimonialsSection({ lang = "de" }: { lang?: Lang }) {
           >
             {lang === "de" ? (
               <>
-                Handwerker in ganz{" "}
-                <span className="relative inline-flex overflow-hidden align-bottom" style={{ minWidth: "5.5ch" }}>
-                  <AnimatePresence mode="wait">
-                    <motion.span
-                      key={cityIdx}
-                      className="text-brand-green"
-                      initial={{ y: 32, opacity: 0, filter: "blur(6px)" }}
-                      animate={{ y: 0,  opacity: 1, filter: "blur(0px)" }}
-                      exit={{   y: -32, opacity: 0, filter: "blur(6px)" }}
-                      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-                    >
-                      {cities[cityIdx]}
-                    </motion.span>
-                  </AnimatePresence>
+                Handwerker{" "}
+                <span className="whitespace-nowrap">
+                  in ganz{" "}
+                  <span className="relative inline-flex overflow-hidden align-bottom" style={{ minWidth: "9ch" }}>
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={cityIdx}
+                        className="text-brand-green whitespace-nowrap"
+                        initial={{ y: 32, opacity: 0, filter: "blur(6px)" }}
+                        animate={{ y: 0,  opacity: 1, filter: "blur(0px)" }}
+                        exit={{   y: -32, opacity: 0, filter: "blur(6px)" }}
+                        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                      >
+                        {cities[cityIdx]}
+                      </motion.span>
+                    </AnimatePresence>
+                  </span>
                 </span>{" "}
                 vertrauen uns.
               </>
             ) : (
               <>
-                Tradespeople across{" "}
-                <span className="relative inline-flex overflow-hidden align-bottom" style={{ minWidth: "5.5ch" }}>
-                  <AnimatePresence mode="wait">
-                    <motion.span
-                      key={cityIdx}
-                      className="text-brand-green"
-                      initial={{ y: 32, opacity: 0, filter: "blur(6px)" }}
-                      animate={{ y: 0,  opacity: 1, filter: "blur(0px)" }}
-                      exit={{   y: -32, opacity: 0, filter: "blur(6px)" }}
-                      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-                    >
-                      {cities[cityIdx]}
-                    </motion.span>
-                  </AnimatePresence>
+                Tradespeople{" "}
+                <span className="whitespace-nowrap">
+                  across{" "}
+                  <span className="relative inline-flex overflow-hidden align-bottom" style={{ minWidth: "9ch" }}>
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={cityIdx}
+                        className="text-brand-green whitespace-nowrap"
+                        initial={{ y: 32, opacity: 0, filter: "blur(6px)" }}
+                        animate={{ y: 0,  opacity: 1, filter: "blur(0px)" }}
+                        exit={{   y: -32, opacity: 0, filter: "blur(6px)" }}
+                        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                      >
+                        {cities[cityIdx]}
+                      </motion.span>
+                    </AnimatePresence>
+                  </span>
                 </span>{" "}
                 trust us.
               </>
