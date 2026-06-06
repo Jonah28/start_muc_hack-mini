@@ -23,7 +23,7 @@ const itemVariants = {
 };
 
 export const AnimatedHero = ({ site }: { site: SiteConfig }) => {
-  const image = site.profile.imageUrls[0] || "/hack-images/Badsanierung.png";
+  const image = site.profile.imageUrls[0] || "/hack-images/craftsman_greeting_smiling.png";
   const glassButtonClassName =
     "px-6 py-3 rounded-md bg-white/10 backdrop-blur-sm border border-white/20 text-white font-semibold hover:bg-white/20 transition-colors cursor-pointer";
 

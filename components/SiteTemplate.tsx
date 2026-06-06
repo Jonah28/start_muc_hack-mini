@@ -10,12 +10,13 @@ import { AuroraFlow } from "./heroes/AuroraFlow";
 import { ShaderShowcase } from "./heroes/ShaderShowcase";
 import { LandingAccordion } from "./heroes/LandingAccordion";
 
-const HACK_IMAGES = [
+const GALLERY_IMAGES = [
+  "/hack-images/craftsman_at_work_bathroom.png",
+  "/hack-images/overtheshoulder_tiling_woman.png",
+  "/hack-images/two_craftsmen_at_work_kitchen.png",
   "/hack-images/Badsanierung.png",
   "/hack-images/Fliesenbearbeitung.png",
-  "/hack-images/Küchenmontage.png",
-  "/hack-images/Renovierung.png",
-  "/hack-images/Wohnungsräumung.png"
+  "/hack-images/Küchenmontage.png"
 ];
 
 const pageLabels: Record<PageId, string> = {
@@ -74,7 +75,7 @@ function Reviews() {
 }
 
 function Gallery({ site }: { site: SiteConfig }) {
-  const images = HACK_IMAGES.slice(0, 6);
+  const images = GALLERY_IMAGES.slice(0, 6);
   return (
     <section className="customer-section gallery-section">
       <p className="customer-eyebrow">Unsere Arbeit</p><h2>Projekte und Eindrücke</h2>
@@ -112,8 +113,12 @@ function Contact({ site }: { site: SiteConfig }) {
 }
 
 function SiteImage({ asset, label }: { asset: SiteImageAsset; label: string }) {
-  const randomImg = HACK_IMAGES[Math.floor(Math.random() * HACK_IMAGES.length)];
-  return <img className="generated-site-image" src={randomImg} alt={asset.alt || label} />;
+  let mappedImg = "/hack-images/Renovierung.png";
+  if (label.includes("Titelbild")) mappedImg = "/hack-images/craftsman_greeting_smiling.png";
+  if (label.includes("Prozessbild")) mappedImg = "/hack-images/craftsman_on_ ladder_smiling.png";
+  if (label.includes("Einblick")) mappedImg = "/hack-images/centred_confident_portrait_woman.png";
+  if (label.includes("Einsatzgebiet")) mappedImg = "/hack-images/two_craftsmen_at_work_kitchen.png";
+  return <img className="generated-site-image" src={mappedImg} alt={asset.alt || label} />;
 }
 
 function PageHero({
@@ -262,7 +267,15 @@ export function SiteTemplate({ site, page }: { site: SiteConfig; page?: string }
 
       {pageContent || <><Hero site={site} />{site.design.sections.filter((section) => section !== "hero" && section !== "emergency").map((section) => <div key={section}>{sectionRenderers[section]?.(site)}</div>)}</>}
 
-      <footer className="customer-footer"><strong>{site.profile.name}</strong><span>{site.profile.address}</span><a href={`tel:${HEY_TELO_PHONE_NUMBER}`}>Anrufen</a></footer>
+      <footer className="customer-footer">
+        <div>
+          <strong>{site.profile.name}</strong><span>{site.profile.address}</span><a href={`tel:${HEY_TELO_PHONE_NUMBER}`}>Anrufen</a>
+        </div>
+        <div style={{ display: 'flex', gap: '1.5rem', marginTop: '1.5rem', fontSize: '0.8rem', opacity: 0.6 }}>
+          <a href="#" style={{ color: 'inherit', textDecoration: 'none' }}>Impressum</a>
+          <a href="#" style={{ color: 'inherit', textDecoration: 'none' }}>Datenschutz</a>
+        </div>
+      </footer>
       <CallButton floating />
     </div>
   );
