@@ -50,8 +50,9 @@ function Services({ site }: { site: SiteConfig }) {
 function About({ site }: { site: SiteConfig }) {
   return (
     <section className="customer-section split-section" id="ueber-uns">
-      <div><p className="customer-eyebrow">Ihr Fachbetrieb</p><h2>Über {site.profile.name}</h2></div>
-      <p>{site.content.about.intro}</p>
+      <img className="generated-site-image" src="/hack-images/centred_confident_portrait_woman.png" alt={`Team von ${site.profile.name}`} />
+      <div><p className="customer-eyebrow">Ihr Fachbetrieb</p><h2>Über {site.profile.name}</h2>
+      <p>{site.content.about.intro}</p></div>
     </section>
   );
 }
@@ -79,15 +80,18 @@ function Gallery({ site }: { site: SiteConfig }) {
   return (
     <section className="customer-section gallery-section">
       <p className="customer-eyebrow">Unsere Arbeit</p><h2>Projekte und Eindrücke</h2>
-      <div className="gallery-grid">{images.map((url, index) => <img key={url} src={url} alt={`Projekt von ${site.profile.name} ${index + 1}`} />)}</div>
+      <div className="gallery-grid">{images.map((url, index) => <img className="generated-site-image" key={url} src={url} alt={`Projekt von ${site.profile.name} ${index + 1}`} />)}</div>
     </section>
   );
 }
 
 function Area({ site }: { site: SiteConfig }) {
   return (
-    <section className="customer-section area-section">
-      <p className="customer-eyebrow">Für Sie vor Ort</p><h2>Unser Einsatzgebiet</h2><p>{site.profile.serviceArea}</p>
+    <section className="customer-section area-section" style={{ position: 'relative', overflow: 'hidden' }}>
+      <img style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.25 }} src="/hack-images/two_craftsmen_at_work_kitchen.png" alt="" />
+      <div style={{ position: 'relative', zIndex: 10 }}>
+        <p className="customer-eyebrow">Für Sie vor Ort</p><h2>Unser Einsatzgebiet</h2><p>{site.profile.serviceArea}</p>
+      </div>
     </section>
   );
 }
