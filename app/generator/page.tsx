@@ -1,4 +1,4 @@
-import { Generator } from "@/components/Generator";
+import { DesignWizard } from "@/components/design-step/DesignWizard";
 
 export default async function GeneratorPage({
   searchParams,
@@ -6,5 +6,5 @@ export default async function GeneratorPage({
   searchParams: Promise<{ url?: string }>;
 }) {
   const { url = "" } = await searchParams;
-  return <Generator initialUrl={url} />;
+  return <DesignWizard initialUrl={url} />;
 }

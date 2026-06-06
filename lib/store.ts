@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
-import type { Database, Inquiry, SiteConfig } from "@/lib/types";
+import type { Database, DesignChoices, Inquiry, SiteConfig } from "@/lib/types";
 
 const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), "data");
 const DATA_FILE = path.join(DATA_DIR, "werkseite.json");
@@ -11,13 +11,35 @@ let writeQueue = Promise.resolve();
 
 async function readDatabase(): Promise<Database> {
   try {
-    return JSON.parse(await readFile(DATA_FILE, "utf8")) as Database;
+    const database = JSON.parse(await readFile(DATA_FILE, "utf8")) as Database;
+    database.sites = database.sites.map(normalizeSite);
+    return database;
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") {
       return structuredClone(EMPTY_DATABASE);
     }
     throw error;
   }
+}
+
+function normalizeSite(site: SiteConfig & { template?: string; color?: string; sections?: string[] }) {
+  if (site.design) return site;
+  const legacyPalettes: Record<string, DesignChoices["palette"]> = {
+    blau: { name: "Trusted Blue", colors: ["#123046", "#195f92", "#e9f3fa", "#475569"] },
+    gruen: { name: "Fresh Green", colors: ["#173a2b", "#2d6a4f", "#e7f2ec", "#475569"] },
+    orange: { name: "Warm Craft", colors: ["#51280d", "#c45d18", "#fbefe5", "#475569"] },
+    anthrazit: { name: "Slate Pro", colors: ["#1e2228", "#424952", "#eef0f2", "#475569"] },
+  };
+  return {
+    ...site,
+    design: {
+      template: { id: "classic-trades", name: "Classic Trades" },
+      palette: legacyPalettes[site.color || "blau"] || legacyPalettes.blau,
+      font: { name: "Modern Sans", heading: "'Poppins', sans-serif", body: "'Inter', sans-serif" },
+      heroLayout: "split" as const,
+      sections: ["hero", ...(site.sections || ["services", "about", "contact"])],
+    },
+  };
 }
 
 async function writeDatabase(database: Database) {
@@ -64,7 +86,7 @@ export async function createSite(
 
 export async function updateSite(
   id: string,
-  patch: Partial<Pick<SiteConfig, "template" | "color" | "sections" | "pages" | "indexable">>,
+  patch: Partial<Pick<SiteConfig, "design" | "pages" | "indexable">>,
 ) {
   return mutateDatabase((database) => {
     const site = database.sites.find((candidate) => candidate.id === id);

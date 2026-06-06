@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
 import { HEY_TELO_PHONE_NUMBER, siteOrigin } from "@/lib/config";
 import type { PageId, SiteConfig } from "@/lib/types";
@@ -10,13 +10,6 @@ const pageLabels: Record<PageId, string> = {
   leistungen: "Leistungen",
   "ueber-uns": "Über uns",
   kontakt: "Kontakt",
-};
-
-const palette = {
-  blau: { accent: "#195f92", dark: "#123046", light: "#e9f3fa" },
-  gruen: { accent: "#2d6a4f", dark: "#173a2b", light: "#e7f2ec" },
-  orange: { accent: "#c45d18", dark: "#51280d", light: "#fbefe5" },
-  anthrazit: { accent: "#424952", dark: "#1e2228", light: "#eef0f2" },
 };
 
 function CallButton({ floating = false }: { floating?: boolean }) {
@@ -50,12 +43,49 @@ function About({ site }: { site: SiteConfig }) {
   );
 }
 
+function Hours() {
+  return (
+    <section className="customer-section hours-section">
+      <p className="customer-eyebrow">Erreichbarkeit</p><h2>Wir sind für Sie da</h2>
+      <div className="hours-grid"><span>Montag – Freitag</span><strong>07:00 – 18:00 Uhr</strong><span>Samstag & Sonntag</span><strong>Hey Telo nimmt Ihren Anruf entgegen</strong></div>
+    </section>
+  );
+}
+
+function Reviews() {
+  return (
+    <section className="customer-section reviews-section">
+      <p className="customer-eyebrow">Kundenstimmen</p><h2>Darauf können Sie sich verlassen</h2>
+      <div className="review-cards">{["Schnelle Rückmeldung und saubere Arbeit.", "Freundlich, verbindlich und professionell.", "Von der Beratung bis zur Umsetzung top."].map((review) => <blockquote key={review}><b>★★★★★</b><p>„{review}“</p></blockquote>)}</div>
+    </section>
+  );
+}
+
+function Gallery({ site }: { site: SiteConfig }) {
+  const images = site.profile.imageUrls.filter((url) => !/\.svg(?:\?|$)/i.test(url)).slice(0, 6);
+  return (
+    <section className="customer-section gallery-section">
+      <p className="customer-eyebrow">Unsere Arbeit</p><h2>Projekte und Eindrücke</h2>
+      <div className="gallery-grid">{images.length ? images.map((url, index) => <img key={url} src={url} alt={`Projekt von ${site.profile.name} ${index + 1}`} />) : site.profile.services.slice(0, 4).map((service) => <div key={service}>{service}</div>)}</div>
+    </section>
+  );
+}
+
 function Area({ site }: { site: SiteConfig }) {
   return (
     <section className="customer-section area-section">
-      <p className="customer-eyebrow">Für Sie vor Ort</p>
-      <h2>Unser Einsatzgebiet</h2>
-      <p>{site.profile.serviceArea}</p>
+      <p className="customer-eyebrow">Für Sie vor Ort</p><h2>Unser Einsatzgebiet</h2><p>{site.profile.serviceArea}</p>
+    </section>
+  );
+}
+
+function Faq({ site }: { site: SiteConfig }) {
+  return (
+    <section className="customer-section faq-section">
+      <p className="customer-eyebrow">Häufige Fragen</p><h2>Gut zu wissen</h2>
+      <details open><summary>Welche Leistungen bieten Sie an?</summary><p>Wir beraten Sie persönlich zu {site.profile.services.slice(0, 3).join(", ")} und weiteren Anliegen.</p></details>
+      <details><summary>In welchem Gebiet sind Sie tätig?</summary><p>Unser Einsatzgebiet ist {site.profile.serviceArea}.</p></details>
+      <details><summary>Wie erreiche ich Sie am schnellsten?</summary><p>Rufen Sie direkt an. Hey Telo nimmt Ihre Anfrage jederzeit zuverlässig auf.</p></details>
     </section>
   );
 }
@@ -63,83 +93,76 @@ function Area({ site }: { site: SiteConfig }) {
 function Contact({ site }: { site: SiteConfig }) {
   return (
     <section className="customer-section contact-section" id="kontakt">
-      <div>
-        <p className="customer-eyebrow">Direkter Kontakt</p>
-        <h2>Wie können wir helfen?</h2>
-        <p>{site.profile.phone}</p>
-        <p>{site.profile.email}</p>
-        <p>{site.profile.address}</p>
-      </div>
+      <div><p className="customer-eyebrow">Direkter Kontakt</p><h2>Wie können wir helfen?</h2><p>{site.profile.phone}</p><p>{site.profile.email}</p><p>{site.profile.address}</p></div>
       <InquiryForm siteId={site.id} />
     </section>
   );
 }
 
+function Hero({ site }: { site: SiteConfig }) {
+  const image = site.profile.imageUrls.find((url) => !/\.svg(?:\?|$)/i.test(url));
+  return (
+    <section className={`customer-hero hero-layout-${site.design.heroLayout}`} style={image ? { "--hero-image": `url("${image}")` } as CSSProperties : undefined}>
+      <div className="hero-copy">
+        <p className="customer-eyebrow">{site.profile.trade} · {site.profile.serviceArea}</p>
+        <h1>{site.profile.name}</h1><p>{site.profile.description}</p>
+        <div className="hero-actions"><CallButton /><a href="#kontakt">Anfrage senden</a></div>
+        {site.design.heroLayout === "trust-forward" && <div className="trust-badges"><span>✓ Meisterbetrieb</span><span>✓ Direkt erreichbar</span><span>✓ Persönlich vor Ort</span></div>}
+      </div>
+      {site.design.heroLayout !== "minimal" && <div className="hero-visual">{image ? <img src={image} alt={`${site.profile.trade} von ${site.profile.name}`} /> : <span>{site.profile.trade}</span>}</div>}
+    </section>
+  );
+}
+
+const sectionRenderers: Record<string, (site: SiteConfig) => ReactNode> = {
+  services: (site) => <Services site={site} />,
+  about: (site) => <About site={site} />,
+  hours: () => <Hours />,
+  reviews: () => <Reviews />,
+  gallery: (site) => <Gallery site={site} />,
+  contact: (site) => <Contact site={site} />,
+  map: (site) => <Area site={site} />,
+  faq: (site) => <Faq site={site} />,
+};
+
 export function SiteTemplate({ site, page }: { site: SiteConfig; page?: string }) {
-  const colors = palette[site.color];
+  const [dark, accent, light, muted] = site.design.palette.colors;
   const origin = siteOrigin(site.slug);
   const style = {
-    "--site-accent": colors.accent,
-    "--site-dark": colors.dark,
-    "--site-light": colors.light,
+    "--site-accent": accent,
+    "--site-dark": dark,
+    "--site-light": light,
+    "--site-muted": muted,
+    "--site-heading": site.design.font.heading,
+    "--site-body": site.design.font.body,
   } as CSSProperties;
 
   const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "HomeAndConstructionBusiness",
-    name: site.profile.name,
-    description: site.profile.description,
-    telephone: site.profile.phone,
-    email: site.profile.email,
-    address: site.profile.address,
-    areaServed: site.profile.serviceArea,
-    url: origin,
-    sameAs: [site.profile.sourceUrl],
+    "@context": "https://schema.org", "@type": "HomeAndConstructionBusiness",
+    name: site.profile.name, description: site.profile.description, telephone: site.profile.phone,
+    email: site.profile.email, address: site.profile.address, areaServed: site.profile.serviceArea,
+    url: origin, sameAs: [site.profile.sourceUrl],
   };
 
-  let pageContent: React.ReactNode = null;
+  let pageContent: ReactNode = null;
   if (page === "leistungen") pageContent = <Services site={site} />;
   if (page === "ueber-uns") pageContent = <About site={site} />;
   if (page === "kontakt") pageContent = <Contact site={site} />;
 
   return (
-    <div className={`customer-site template-${site.template}`} style={style}>
+    <div className={`customer-site customer-template-${site.design.template.id}`} style={style}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      {site.design.sections.includes("emergency") && <div className="emergency-banner">24/7 Notdienst: Rufen Sie jetzt an · <a href={`tel:${HEY_TELO_PHONE_NUMBER}`}>{HEY_TELO_PHONE_NUMBER}</a></div>}
       {isWeekend() && <div className="weekend-banner">Auch am Wochenende erreichbar: Hey Telo nimmt Ihren Anruf entgegen.</div>}
       <header className="customer-header">
         <Link className="customer-logo" href={origin}>{site.profile.name}</Link>
-        <nav>
-          <Link href={origin}>Start</Link>
-          {site.pages.map((item) => <Link key={item} href={`${origin}/${item}`}>{pageLabels[item]}</Link>)}
-        </nav>
+        <nav><Link href={origin}>Start</Link>{site.pages.map((item) => <Link key={item} href={`${origin}/${item}`}>{pageLabels[item]}</Link>)}</nav>
         <CallButton />
       </header>
 
-      {pageContent || (
-        <>
-          <section className="customer-hero">
-            <div>
-              <p className="customer-eyebrow">{site.profile.trade} · {site.profile.serviceArea}</p>
-              <h1>{site.profile.name}</h1>
-              <p>{site.profile.description}</p>
-              <div className="hero-actions"><CallButton /><a href="#kontakt">Anfrage senden</a></div>
-            </div>
-            <div className="hero-visual">
-              {site.profile.imageUrls[0] ? <img src={site.profile.imageUrls[0]} alt={`${site.profile.trade} von ${site.profile.name}`} /> : <span>{site.profile.trade}</span>}
-            </div>
-          </section>
-          {site.sections.includes("services") && <Services site={site} />}
-          {site.sections.includes("about") && <About site={site} />}
-          {site.sections.includes("area") && <Area site={site} />}
-          {site.sections.includes("contact") && <Contact site={site} />}
-        </>
-      )}
+      {pageContent || <><Hero site={site} />{site.design.sections.filter((section) => section !== "hero" && section !== "emergency").map((section) => <div key={section}>{sectionRenderers[section]?.(site)}</div>)}</>}
 
-      <footer className="customer-footer">
-        <strong>{site.profile.name}</strong>
-        <span>{site.profile.address}</span>
-        <a href={`tel:${HEY_TELO_PHONE_NUMBER}`}>Anrufen</a>
-      </footer>
+      <footer className="customer-footer"><strong>{site.profile.name}</strong><span>{site.profile.address}</span><a href={`tel:${HEY_TELO_PHONE_NUMBER}`}>Anrufen</a></footer>
       <CallButton floating />
     </div>
   );

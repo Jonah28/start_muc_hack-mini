@@ -1,12 +1,26 @@
-export const TEMPLATE_IDS = ["klar", "tradition", "premium"] as const;
-export const COLOR_IDS = ["blau", "gruen", "orange", "anthrazit"] as const;
-export const SECTION_IDS = ["services", "about", "area", "contact"] as const;
 export const PAGE_IDS = ["leistungen", "ueber-uns", "kontakt"] as const;
-
-export type TemplateId = (typeof TEMPLATE_IDS)[number];
-export type ColorId = (typeof COLOR_IDS)[number];
-export type SectionId = (typeof SECTION_IDS)[number];
 export type PageId = (typeof PAGE_IDS)[number];
+
+export type HeroLayoutId = "split" | "full-bleed" | "minimal" | "trust-forward";
+
+export interface PaletteChoice {
+  name: string;
+  colors: [string, string, string, string];
+}
+
+export interface FontChoice {
+  name: string;
+  heading: string;
+  body: string;
+}
+
+export interface DesignChoices {
+  template: { id: string; name: string };
+  palette: PaletteChoice;
+  font: FontChoice;
+  heroLayout: HeroLayoutId;
+  sections: string[];
+}
 
 export interface BusinessProfile {
   name: string;
@@ -25,9 +39,7 @@ export interface SiteConfig {
   id: string;
   slug: string;
   profile: BusinessProfile;
-  template: TemplateId;
-  color: ColorId;
-  sections: SectionId[];
+  design: DesignChoices;
   pages: PageId[];
   indexable: boolean;
   createdAt: string;
