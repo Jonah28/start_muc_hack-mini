@@ -1,0 +1,9 @@
+{
+  "name": "webstart-landing",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve . --listen 3333 --no-clipboard",
+    "start": "npx serve . --listen 3333 --no-clipboard"
+  }
+}
