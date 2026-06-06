@@ -5,14 +5,14 @@ import { motion } from "framer-motion";
 type Lang = "de" | "en";
 
 const LOGOS = [
-  { name: "Würth",     domain: "wurth.com"     },
-  { name: "Bosch",     domain: "bosch.com"     },
-  { name: "Hilti",     domain: "hilti.com"     },
-  { name: "Knauf",     domain: "knauf.com"     },
-  { name: "Viessmann", domain: "viessmann.com" },
-  { name: "Hansgrohe", domain: "hansgrohe.com" },
-  { name: "Stihl",     domain: "stihl.com"     },
-  { name: "Festool",   domain: "festool.com"   },
+  { name: "Würth",     src: "/logos/wuerth-logo.png"              },
+  { name: "Bosch",     src: "/logos/1280px-Bosch-logotype.svg.png" },
+  { name: "Hilti",     src: "/logos/Hilti_logo.svg.png"           },
+  { name: "Knauf",     src: "/logos/Knauf-Logo.png"               },
+  { name: "Viessmann", src: "/logos/Viessmann-logo.svg.png"       },
+  { name: "Hansgrohe", src: "/logos/Hansgrohe-Logo.svg.png"       },
+  { name: "Stihl",     src: "/logos/Stihl_Logo.svg.png"           },
+  { name: "Festool",   src: "/logos/Festool.svg.png"              },
 ];
 
 const COPY = {
@@ -64,19 +64,11 @@ export function TrustedBy({ lang = "de" }: { lang?: Lang }) {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={`https://logo.clearbit.com/${logo.domain}`}
+                src={logo.src}
                 alt={logo.name}
                 width={90}
                 height={40}
                 className="object-contain max-h-[36px] max-w-[90px] transition-all duration-300 grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-90"
-                onError={(e) => {
-                  /* fallback to text if logo fails to load */
-                  const parent = (e.target as HTMLImageElement).parentElement;
-                  if (parent) {
-                    (e.target as HTMLImageElement).style.display = "none";
-                    parent.innerHTML = `<span style="font-family:var(--font-display);font-weight:700;font-size:0.8rem;color:rgba(26,26,24,0.35);letter-spacing:-0.01em">${logo.name}</span>`;
-                  }
-                }}
               />
             </div>
           ))}
