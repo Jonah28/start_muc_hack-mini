@@ -4,20 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Globe } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { GameOverlay } from "@/components/ui/game-overlay";
 
 const GREETINGS_DE = ["Moin", "Servus", "Hey", "Na", "Hallo", "Glück auf"];
 const GREETINGS_EN = ["Hello", "Hi there", "Hey", "G'day", "Welcome"];
-
-const ANALYSIS_STEPS_DE = [
-  "Website wird geladen…",
-  "Inhalte werden analysiert…",
-  "Fast fertig…",
-];
-const ANALYSIS_STEPS_EN = [
-  "Loading website…",
-  "Analysing content…",
-  "Almost done…",
-];
 
 type Lang = "de" | "en";
 
@@ -104,18 +94,17 @@ interface HeroProps {
   onLangChange: (l: Lang) => void;
 }
 
-export function AnimatedHero({ lang }: HeroProps) {
+export function AnimatedHero({ lang, onLangChange }: HeroProps) {
   const router = useRouter();
-  const [greetingIdx, setGreetingIdx] = useState(0);
-  const [url, setUrl] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [step, setStep] = useState(0);
+  const [greetingIdx,  setGreetingIdx]  = useState(0);
+  const [url,          setUrl]          = useState("");
+  const [error,        setError]        = useState("");
+  const [showGame,     setShowGame]     = useState(false);
+  const [submittedUrl, setSubmittedUrl] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const heroRef  = useRef<HTMLDivElement>(null);
 
   const greetings = lang === "de" ? GREETINGS_DE : GREETINGS_EN;
-  const steps     = lang === "de" ? ANALYSIS_STEPS_DE : ANALYSIS_STEPS_EN;
   const t         = copy[lang];
 
   const { scrollYProgress } = useScroll({
@@ -130,13 +119,6 @@ export function AnimatedHero({ lang }: HeroProps) {
     );
     return () => clearTimeout(id);
   }, [greetingIdx, greetings.length]);
-
-  useEffect(() => {
-    if (!isLoading) return;
-    const t1 = setTimeout(() => setStep(1), 1500);
-    const t2 = setTimeout(() => setStep(2), 3000);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, [isLoading]);
 
   function clearError() { setError(""); }
 
@@ -154,9 +136,9 @@ export function AnimatedHero({ lang }: HeroProps) {
       inputRef.current?.focus();
       return;
     }
-    setStep(0);
-    setIsLoading(true);
-    router.push(`/generator?url=${encodeURIComponent(normaliseUrl(raw))}`);
+    const finalUrl = normaliseUrl(raw);
+    setSubmittedUrl(finalUrl);
+    setShowGame(true);
   }
 
   const fadeUp = (delay: number) => ({
@@ -234,17 +216,15 @@ export function AnimatedHero({ lang }: HeroProps) {
                 value={url}
                 onChange={(e) => { setUrl(e.target.value); clearError(); }}
                 placeholder={t.placeholder}
-                disabled={isLoading}
                 autoComplete="url"
                 spellCheck={false}
-                className="flex-1 py-4 bg-transparent outline-none text-[1rem] text-ink placeholder:text-ink-muted disabled:opacity-50 min-w-0"
+                className="flex-1 py-4 bg-transparent outline-none text-[1rem] text-ink placeholder:text-ink-muted min-w-0"
                 aria-label={lang === "de" ? "Aktuelle Website-URL" : "Current website URL"}
               />
             </div>
             <button
               type="submit"
-              disabled={isLoading}
-              className="flex-shrink-0 flex items-center justify-center gap-2 px-7 py-4 bg-brand-green text-white font-semibold rounded-xl shadow-[0_2px_12px_color-mix(in_srgb,var(--color-brand-green)_28%,transparent)] hover:bg-brand-green-hover hover:shadow-[0_4px_22px_color-mix(in_srgb,var(--color-brand-green)_40%,transparent)] active:translate-y-px transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:translate-y-0 cursor-pointer"
+              className="flex-shrink-0 flex items-center justify-center gap-2 px-7 py-4 bg-brand-green text-white font-semibold rounded-xl shadow-[0_2px_12px_color-mix(in_srgb,var(--color-brand-green)_28%,transparent)] hover:bg-brand-green-hover hover:shadow-[0_4px_22px_color-mix(in_srgb,var(--color-brand-green)_40%,transparent)] active:translate-y-px transition-all cursor-pointer"
               style={{ fontFamily: "var(--font-display)" }}
             >
               {t.cta}
@@ -266,44 +246,30 @@ export function AnimatedHero({ lang }: HeroProps) {
           </AnimatePresence>
         </motion.form>
 
-        {/* Loading */}
-        <AnimatePresence>
-          {isLoading && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25 }}
-              className="mt-5 flex items-center gap-3 bg-brand-green-light rounded-xl px-5 py-4"
-            >
-              <div className="w-5 h-5 rounded-full border-2 border-brand-green/25 border-t-brand-green animate-spin flex-shrink-0" aria-hidden />
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={step}
-                  initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.2 }}
-                  className="text-sm font-semibold text-brand-green"
-                  aria-live="polite"
-                >
-                  {steps[step]}
-                </motion.p>
-              </AnimatePresence>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
         {/* Alt link */}
-        <AnimatePresence>
-          {!isLoading && (
-            <motion.button
-              type="button"
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              transition={{ delay: 0.5, duration: 0.3 }}
-              className="mt-5 block text-sm text-ink-muted underline underline-offset-[5px] decoration-border-subtle hover:text-ink-mid hover:decoration-ink-mid transition-all cursor-pointer"
-            >
-              {t.altLink}
-            </motion.button>
-          )}
-        </AnimatePresence>
+        <motion.button
+          type="button"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          transition={{ delay: 0.5, duration: 0.3 }}
+          className="mt-5 block text-sm text-ink-muted underline underline-offset-[5px] decoration-border-subtle hover:text-ink-mid hover:decoration-ink-mid transition-all cursor-pointer"
+        >
+          {t.altLink}
+        </motion.button>
       </div>
+
+      {/* Game overlay — mounts on valid submit, redirects to /generator on complete */}
+      <AnimatePresence>
+        {showGame && (
+          <GameOverlay
+            url={submittedUrl}
+            onComplete={() => {
+              setShowGame(false);
+              setUrl("");
+              router.push(`/generator?url=${encodeURIComponent(submittedUrl)}`);
+            }}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }
