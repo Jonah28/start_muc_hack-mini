@@ -13,7 +13,7 @@ interface WinCell { row: number; col: number; health: Health; }
 /* ── Constants ─────────────────────────────────────────────────────────── */
 const ROWS          = 4;
 const COLS          = 5;
-const RALPH_MS      = 700;   // ralph moves every 700 ms
+const RALPH_MS      = 1000;  // ralph moves every 1000 ms
 const GAME_SECONDS  = 120;   // game timer
 const BUILD_SECONDS = 55;    // fake build duration
 
@@ -167,8 +167,8 @@ export function GameOverlay({ url, onComplete }: Props) {
     const r = felixRowRef.current;
     const c = felixColRef.current;
     setWindows(ws => ws.map(w =>
-      w.row === r && w.col === c && w.health === 1
-        ? { ...w, health: 2 } : w
+      w.row === r && w.col === c && w.health < 2
+        ? { ...w, health: Math.min(2, w.health + 1) as Health } : w
     ));
     setFelixAnim("fixing");
     resetAnim();
@@ -213,7 +213,7 @@ export function GameOverlay({ url, onComplete }: Props) {
 
   /* ── Render ─────────────────────────────────────────────────────────── */
   return (
-    <div className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-black/88 backdrop-blur-lg p-4 gap-3">
+    <div className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-black/88 backdrop-blur-lg p-4 gap-3" tabIndex={-1}>
 
       {/* Title */}
       <motion.div
