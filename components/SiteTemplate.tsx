@@ -5,6 +5,18 @@ import { HEY_TELO_PHONE_NUMBER, siteOrigin } from "@/lib/config";
 import type { PageId, SiteConfig, SiteImageAsset } from "@/lib/types";
 import { isWeekend } from "@/lib/utils";
 import { InquiryForm } from "@/components/InquiryForm";
+import { AnimatedHero } from "./heroes/AnimatedHero";
+import { AuroraFlow } from "./heroes/AuroraFlow";
+import { ShaderShowcase } from "./heroes/ShaderShowcase";
+import { LandingAccordion } from "./heroes/LandingAccordion";
+
+const HACK_IMAGES = [
+  "/hack-images/Badsanierung.png",
+  "/hack-images/Fliesenbearbeitung.png",
+  "/hack-images/Küchenmontage.png",
+  "/hack-images/Renovierung.png",
+  "/hack-images/Wohnungsräumung.png"
+];
 
 const pageLabels: Record<PageId, string> = {
   leistungen: "Leistungen",
@@ -15,7 +27,7 @@ const pageLabels: Record<PageId, string> = {
 function CallButton({ floating = false }: { floating?: boolean }) {
   return (
     <a className={floating ? "floating-call" : "site-call"} href={`tel:${HEY_TELO_PHONE_NUMBER}`}>
-      <span aria-hidden="true">☎</span> Jetzt anrufen
+      <span aria-hidden="true">☎</span> {HEY_TELO_PHONE_NUMBER}
     </a>
   );
 }
@@ -26,7 +38,7 @@ function Services({ site }: { site: SiteConfig }) {
       <p className="customer-eyebrow">Was wir für Sie tun</p>
       <h2>Unsere Leistungen</h2>
       <div className="service-grid">
-        {site.content.services.services.map((service, index) => (
+        {site.content.services.services.slice(0, 3).map((service, index) => (
           <article key={service.name}><span>0{index + 1}</span><h3>{service.name}</h3><p>{service.description}</p></article>
         ))}
       </div>
@@ -62,11 +74,11 @@ function Reviews() {
 }
 
 function Gallery({ site }: { site: SiteConfig }) {
-  const images = site.profile.imageUrls.filter((url) => !/\.svg(?:\?|$)/i.test(url)).slice(0, 6);
+  const images = HACK_IMAGES.slice(0, 6);
   return (
     <section className="customer-section gallery-section">
       <p className="customer-eyebrow">Unsere Arbeit</p><h2>Projekte und Eindrücke</h2>
-      <div className="gallery-grid">{images.length ? images.map((url, index) => <img key={url} src={url} alt={`Projekt von ${site.profile.name} ${index + 1}`} />) : site.profile.services.slice(0, 4).map((service) => <div key={service}>{service}</div>)}</div>
+      <div className="gallery-grid">{images.map((url, index) => <img key={url} src={url} alt={`Projekt von ${site.profile.name} ${index + 1}`} />)}</div>
     </section>
   );
 }
@@ -93,22 +105,15 @@ function Faq({ site }: { site: SiteConfig }) {
 function Contact({ site }: { site: SiteConfig }) {
   return (
     <section className="customer-section contact-section" id="kontakt">
-      <div><p className="customer-eyebrow">Direkter Kontakt</p><h2>Wie können wir helfen?</h2><p>{site.profile.phone}</p><p>{site.profile.email}</p><p>{site.profile.address}</p></div>
+      <div><p className="customer-eyebrow">Direkter Kontakt</p><h2>Wie können wir helfen?</h2><p>{HEY_TELO_PHONE_NUMBER}</p><p>{site.profile.email}</p><p>{site.profile.address}</p></div>
       <InquiryForm siteId={site.id} />
     </section>
   );
 }
 
 function SiteImage({ asset, label }: { asset: SiteImageAsset; label: string }) {
-  return asset.url ? (
-    <img className="generated-site-image" src={asset.url} alt={asset.alt} />
-  ) : (
-    <div className="generated-image-placeholder" role="img" aria-label={asset.alt}>
-      <span>{label}</span>
-      <strong>{asset.alt}</strong>
-      <small>KI-Bild-Slot</small>
-    </div>
-  );
+  const randomImg = HACK_IMAGES[Math.floor(Math.random() * HACK_IMAGES.length)];
+  return <img className="generated-site-image" src={randomImg} alt={asset.alt || label} />;
 }
 
 function PageHero({
@@ -181,7 +186,7 @@ function ContactPage({ site }: { site: SiteConfig }) {
       <section className="customer-section contact-page-section">
         <div className="contact-details">
           <p className="customer-eyebrow">Wir melden uns zurück</p><h2>Ihr direkter Kontakt</h2><p>{content.callbackText}</p>
-          <a href={`tel:${HEY_TELO_PHONE_NUMBER}`}><strong>{site.profile.phone}</strong><span>Jetzt über Hey Telo anrufen</span></a>
+          <a href={`tel:${HEY_TELO_PHONE_NUMBER}`}><strong>{HEY_TELO_PHONE_NUMBER}</strong><span>Jetzt über Hey Telo anrufen</span></a>
           <a href={`mailto:${site.profile.email}`}><strong>{site.profile.email}</strong><span>E-Mail senden</span></a>
           <p>{site.profile.address}</p>
         </div>
@@ -196,18 +201,11 @@ function ContactPage({ site }: { site: SiteConfig }) {
 }
 
 function Hero({ site }: { site: SiteConfig }) {
-  const image = site.profile.imageUrls.find((url) => !/\.svg(?:\?|$)/i.test(url));
-  return (
-    <section className={`customer-hero hero-layout-${site.design.heroLayout}`} style={image ? { "--hero-image": `url("${image}")` } as CSSProperties : undefined}>
-      <div className="hero-copy">
-        <p className="customer-eyebrow">{site.profile.trade} · {site.profile.serviceArea}</p>
-        <h1>{site.profile.name}</h1><p>{site.profile.description}</p>
-        <div className="hero-actions"><CallButton /><a href="#kontakt">Anfrage senden</a></div>
-        {site.design.heroLayout === "trust-forward" && <div className="trust-badges"><span>✓ Meisterbetrieb</span><span>✓ Direkt erreichbar</span><span>✓ Persönlich vor Ort</span></div>}
-      </div>
-      {site.design.heroLayout !== "minimal" && <div className="hero-visual">{image ? <img src={image} alt={`${site.profile.trade} von ${site.profile.name}`} /> : <span>{site.profile.trade}</span>}</div>}
-    </section>
-  );
+  if (site.design.heroLayout === "full-bleed") return <AnimatedHero site={site} />;
+  if (site.design.heroLayout === "trust-forward") return <AuroraFlow site={site} />;
+  if (site.design.heroLayout === "minimal") return <ShaderShowcase site={site} />;
+  if (site.design.heroLayout === "split") return <LandingAccordion site={site} />;
+  return <AnimatedHero site={site} />;
 }
 
 const sectionRenderers: Record<string, (site: SiteConfig) => ReactNode> = {
@@ -235,7 +233,7 @@ export function SiteTemplate({ site, page }: { site: SiteConfig; page?: string }
 
   const jsonLd = {
     "@context": "https://schema.org", "@type": "HomeAndConstructionBusiness",
-    name: site.profile.name, description: site.profile.description, telephone: site.profile.phone,
+    name: site.profile.name, description: site.profile.description, telephone: HEY_TELO_PHONE_NUMBER,
     email: site.profile.email, address: site.profile.address, areaServed: site.profile.serviceArea,
     url: origin, sameAs: [site.profile.sourceUrl],
   };
@@ -250,6 +248,12 @@ export function SiteTemplate({ site, page }: { site: SiteConfig; page?: string }
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       {site.design.sections.includes("emergency") && <div className="emergency-banner">24/7 Notdienst: Rufen Sie jetzt an · <a href={`tel:${HEY_TELO_PHONE_NUMBER}`}>{HEY_TELO_PHONE_NUMBER}</a></div>}
       {isWeekend() && <div className="weekend-banner">Auch am Wochenende erreichbar: Hey Telo nimmt Ihren Anruf entgegen.</div>}
+      <div className="customer-topbar">
+        <span>✓ Regional vor Ort · ✓ Zuverlässig & Kompetent</span>
+        <div className="topbar-contact">
+          <a href={`mailto:${site.profile.email}`}>✉ {site.profile.email}</a>
+        </div>
+      </div>
       <header className="customer-header">
         <Link className="customer-logo" href={origin}>{site.profile.name}</Link>
         <nav><Link href={origin}>Start</Link>{site.pages.map((item) => <Link key={item} href={`${origin}/${item}`}>{pageLabels[item]}</Link>)}</nav>

@@ -1,6 +1,6 @@
 export const ROOT_DOMAIN = process.env.ROOT_DOMAIN || "werkseite.org";
 export const HEY_TELO_PHONE_NUMBER =
-  process.env.HEY_TELO_PHONE_NUMBER || "+491234567890";
+  process.env.HEY_TELO_PHONE_NUMBER || "+4934596397095";
 
 export function siteOrigin(slug: string) {
   if (process.env.NODE_ENV === "development") {

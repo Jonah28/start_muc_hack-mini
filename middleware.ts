@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { ROOT_DOMAIN } from "@/lib/config";
 import { hostToSlug } from "@/lib/utils";
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   if (
     pathname.startsWith("/api/") ||
