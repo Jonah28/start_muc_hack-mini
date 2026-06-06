@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Globe } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const GREETINGS_DE = ["Moin", "Servus", "Hey", "Na", "Hallo", "Glück auf"];
 const GREETINGS_EN = ["Hello", "Hi there", "Hey", "G'day", "Welcome"];
@@ -103,7 +104,8 @@ interface HeroProps {
   onLangChange: (l: Lang) => void;
 }
 
-export function AnimatedHero({ lang, onLangChange }: HeroProps) {
+export function AnimatedHero({ lang }: HeroProps) {
+  const router = useRouter();
   const [greetingIdx, setGreetingIdx] = useState(0);
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
@@ -130,7 +132,7 @@ export function AnimatedHero({ lang, onLangChange }: HeroProps) {
   }, [greetingIdx, greetings.length]);
 
   useEffect(() => {
-    if (!isLoading) { setStep(0); return; }
+    if (!isLoading) return;
     const t1 = setTimeout(() => setStep(1), 1500);
     const t2 = setTimeout(() => setStep(2), 3000);
     return () => { clearTimeout(t1); clearTimeout(t2); };
@@ -152,15 +154,15 @@ export function AnimatedHero({ lang, onLangChange }: HeroProps) {
       inputRef.current?.focus();
       return;
     }
+    setStep(0);
     setIsLoading(true);
-    console.log("Submitting:", normaliseUrl(raw));
-    /* TODO: router.push(`/generate?url=${encodeURIComponent(normaliseUrl(raw))}`) */
+    router.push(`/generator?url=${encodeURIComponent(normaliseUrl(raw))}`);
   }
 
   const fadeUp = (delay: number) => ({
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] as const },
   });
 
   return (

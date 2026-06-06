@@ -16,9 +16,10 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "WebStart – Neue Website in Minuten",
+  title: "Werkseite – Neue Website in Minuten",
   description:
     "Aus deiner alten Website wird in Minuten eine neue. Einfach URL eingeben.",
+  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({
@@ -27,6 +28,7 @@ export default function RootLayout({
   return (
     <html
       lang="de"
+      data-scroll-behavior="smooth"
       className={`${bricolage.variable} ${dmSans.variable} h-full`}
     >
       <body className="min-h-dvh flex flex-col">{children}</body>

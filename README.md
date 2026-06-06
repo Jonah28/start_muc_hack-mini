@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Werkseite
 
-## Getting Started
+Aus einer bestehenden Handwerker-Website wird in wenigen Klicks eine moderne,
+öffentlich erreichbare Website unter einer eigenen Subdomain.
 
-First, run the development server:
+## Lokal starten
 
 ```bash
+cp .env.example .env.local
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Generator: `http://localhost:3333`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Generierte Website: `http://<slug>.localhost:3333`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Ohne `OPENAI_API_KEY` nutzt die Extraktion automatisch die regelbasierte
+Fallback-Logik. Ein Codex-Zugang ist kein OpenAI-API-Key.
 
-## Learn More
+## Coolify-Deployment
 
-To learn more about Next.js, take a look at the following resources:
+1. In Cloudflare zwei DNS-Einträge als **DNS only** anlegen:
+   - `A @` → öffentliche VPS-IP
+   - `A *` → öffentliche VPS-IP
+2. In Coolify eine neue Anwendung aus `Jonah28/start_muc_hack-mini`, Branch
+   `main`, erstellen und das `Dockerfile` als Build-Pack wählen.
+3. Port `3333` exponieren und ein persistentes Volume nach `/app/data` mounten.
+4. Die Domains `https://werkseite.org` und `https://*.werkseite.org` hinterlegen.
+5. Für ein Wildcard-Zertifikat Coolifys Traefik DNS-Challenge mit einem
+   Cloudflare-Token konfigurieren. Der Token benötigt für `werkseite.org`
+   mindestens `Zone:Read` und `DNS:Edit`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Environment-Variablen
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```env
+ROOT_DOMAIN=werkseite.org
+DATA_DIR=/app/data
+OPENAI_API_KEY=
+OPENAI_MODEL=gpt-5.4-mini
+HEY_TELO_PHONE_NUMBER=+491234567890
+HEY_TELO_WEBHOOK_URL=
+```
 
-## Deploy on Vercel
+`HEY_TELO_WEBHOOK_URL` ist optional. Ist sie gesetzt, wird jede Anfrage nach
+dem Speichern an diesen Endpunkt gesendet.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Design-Übergabe
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Die bestehende Generator-Landingpage liegt in `app/page.tsx` und
+  `components/ui/animated-hero.tsx`.
+- Die Kundenwebsite liegt in `components/SiteTemplate.tsx`.
+- Alle Styles stehen in `app/globals.css` und sind über die Präfixe
+  `.landing-*`, `.generator-*` und `.customer-*` getrennt.
+- Die Datenverträge für neue Designs stehen in `lib/types.ts`.
+
+## SEO
+
+Jede Kundenwebsite startet mit `noindex`. Nach Aktivierung des
+SEO-Publish-Schalters werden Meta-Robots, `robots.txt`, `sitemap.xml`,
+Canonical-URLs, Open Graph und strukturierte Local-Business-Daten freigegeben.
