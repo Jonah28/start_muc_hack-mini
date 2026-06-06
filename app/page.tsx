@@ -107,11 +107,16 @@ function SectionNav({ lang }: { lang: Lang }) {
 }
 
 /* ── Logo with collapsing wordmark ────────────────────────────────────── */
-function NavLogo({ pastHero }: { pastHero: boolean }) {
+function NavLogo({ scrolled, pastHero }: { scrolled: boolean; pastHero: boolean }) {
   const { scrollY } = useScroll();
   const logoTextOpacity     = useTransform(scrollY, [0, 90], [1, 0]);
   const logoTextMaxWidth    = useTransform(scrollY, [0, 90], [140, 0]);
   const logoTextPaddingLeft = useTransform(scrollY, [0, 90], [8, 0]);
+
+  /* Dark on light bg (top + pastHero), white only in dark-glass phase */
+  const inDarkGlass = scrolled && !pastHero;
+  const wordmarkColor = inDarkGlass ? "#ffffff" : "#1c1917";
+  const dotColor      = inDarkGlass ? "rgba(255,255,255,0.55)" : "var(--color-brand-green)";
 
   return (
     <a href="#" className="flex items-center overflow-hidden" aria-label="werkseite.org">
@@ -131,15 +136,13 @@ function NavLogo({ pastHero }: { pastHero: boolean }) {
           whiteSpace: "nowrap",
           display: "inline-block",
           fontFamily: "var(--font-display)",
-          color: pastHero ? "#1c1917" : "#ffffff",
+          color: wordmarkColor,
           transition: "color 0.3s ease",
         }}
         className="font-bold text-[1.05rem] tracking-tight"
       >
         werkseite
-        <span style={{ color: pastHero ? "var(--color-brand-green)" : "rgba(255,255,255,0.55)" }}>
-          .org
-        </span>
+        <span style={{ color: dotColor, transition: "color 0.3s ease" }}>.org</span>
       </motion.span>
     </a>
   );
@@ -187,7 +190,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-5 md:px-8 h-16 grid grid-cols-3 items-center">
 
           {/* Left — logo */}
-          <NavLogo pastHero={pastHero} />
+          <NavLogo scrolled={scrolled} pastHero={pastHero} />
 
           {/* Center — pill nav (desktop only, fades as user scrolls) */}
           <motion.div
@@ -217,16 +220,17 @@ export default function Home() {
               className="hidden sm:inline-flex items-center px-4 py-2 rounded-lg text-[11px] font-bold tracking-widest uppercase transition-all duration-300 cursor-pointer"
               style={{
                 fontFamily: "var(--font-display)",
-                ...(pastHero
+                /* White ghost only in dark-glass phase; solid green on light backgrounds */
+                ...(scrolled && !pastHero
                   ? {
-                      background: "var(--color-brand-green)",
-                      color: "#fff",
-                      boxShadow: "0 2px 12px color-mix(in srgb, var(--color-brand-green) 28%, transparent)",
-                    }
-                  : {
                       background: "rgba(255,255,255,0.15)",
                       color: "#fff",
                       border: "1px solid rgba(255,255,255,0.25)",
+                    }
+                  : {
+                      background: "var(--color-brand-green)",
+                      color: "#fff",
+                      boxShadow: "0 2px 12px color-mix(in srgb, var(--color-brand-green) 28%, transparent)",
                     }),
               }}
             >
