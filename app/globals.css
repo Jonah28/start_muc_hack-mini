@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Brand palette */
+  --color-surface:              #f7f6f4;
+  --color-ink:                  #1a1a18;
+  --color-ink-mid:              #3d3d38;
+  --color-ink-muted:            #7a7a72;
+  --color-brand-green:          #2d6a4f;
+  --color-brand-green-hover:    #1b4d38;
+  --color-brand-green-light:    #d8ede4;
+  --color-border-subtle:        #e2e1dd;
+
+  /* shadcn CSS-var tokens (used by button variants) */
+  --color-background:           #ffffff;
+  --color-foreground:           #1a1a18;
+  --color-primary:              #2d6a4f;
+  --color-primary-foreground:   #ffffff;
+  --color-secondary:            #f0ede9;
+  --color-secondary-foreground: #1a1a18;
+  --color-muted:                #f0ede9;
+  --color-muted-foreground:     #7a7a72;
+  --color-accent:               #d8ede4;
+  --color-accent-foreground:    #1a1a18;
+  --color-destructive:          #b91c1c;
+  --color-destructive-foreground: #ffffff;
+  --color-border:               #e2e1dd;
+  --color-input:                #e2e1dd;
+  --color-ring:                 #2d6a4f;
+
+  /* Fonts */
+  --font-display:  var(--font-bricolage), system-ui, sans-serif;
+  --font-body:     var(--font-dm-sans), system-ui, sans-serif;
+
+  /* Radius */
+  --radius: 0.625rem;
+}
+
+* {
+  border-color: var(--color-border-subtle);
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  min-height: 100dvh;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 0.8s linear infinite;
+}
